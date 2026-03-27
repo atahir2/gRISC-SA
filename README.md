@@ -1,4 +1,4 @@
-# SAQ Sustainability Assessment Toolkit
+# gRISC Self-Assessment Toolkit
 
 A web-based toolkit for assessing the sustainability maturity of research infrastructures, digital infrastructures, and data centres.
 The system enables structured self-assessment, generates actionable improvement plans, and produces professional reports to support sustainability planning and certification readiness.
@@ -7,7 +7,7 @@ The system enables structured self-assessment, generates actionable improvement 
 
 ## Overview
 
-The SAQ (Self-Assessment Questionnaire) Toolkit is designed to transform static sustainability questionnaires into an interactive, data-driven platform.
+The gRISC Self-Assessment toolkit is designed to transform static sustainability questionnaires into an interactive, data-driven platform.
 
 It allows organisations to:
 
@@ -109,9 +109,11 @@ src/
     report/
 
   components/saq/
+
   lib/
     saq/
       engine/
+      utils/
       questionnaire.data.json
     supabase/
 
@@ -183,23 +185,6 @@ These ensure consistency across development and enable easier onboarding for con
 
 ---
 
-## Future Work
-
-* Evidence management and audit trails
-* Role-based workflows (assessor / reviewer / admin)
-* Benchmarking across organisations
-* Integration with sustainability standards and policy frameworks
-* Longitudinal assessments and trend analysis
-
----
-
-## License
-
-This project is intended for research and development purposes.
-Licensing terms can be defined based on future distribution and collaboration needs.
-
----
-
 ## Contact
 
-For collaboration, research integration, or contributions, please reach out to the project maintainers.
+For collaboration, research integration, or contributions, please reach out to Adnan (a.tahir2@uva.nl)
