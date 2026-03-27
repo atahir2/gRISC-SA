@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== SAQ Report: section hierarchy and identity ===== */
+.saq-report-root .report-section-first {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.saq-report-root {
+  border-left: 3px solid rgb(34, 197, 94);
+}
+
+.saq-summary-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+/* ===== SAQ Report PDF/export mode (html2canvas capture) =====
+   Applied when generating PDF so layout is stable and print-safe.
+   Fixed width, stacked layouts, larger spacing/typography. */
+
+.saq-report-root.saq-export-mode {
+  width: 794px;
+  max-width: 794px;
+  min-width: 794px;
+  box-sizing: border-box;
+  font-size: 11pt;
+  line-height: 1.5;
+  padding: 24px 28px;
+}
+
+.saq-report-root.saq-export-mode * {
+  box-sizing: border-box;
+}
+
+/* Report header: prevent title/metadata overlap, stack metadata */
+.saq-report-root.saq-export-mode .report-header {
+  padding-bottom: 20px;
+  border-bottom-width: 1px;
+}
+
+.saq-report-root.saq-export-mode .report-header .report-title {
+  font-size: 1.25rem;
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.saq-report-root.saq-export-mode .report-header .report-subtitle {
+  font-size: 0.8125rem;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.saq-report-root.saq-export-mode .report-header .report-meta-list {
+  display: block;
+}
+
+.saq-report-root.saq-export-mode .report-header .report-meta-list > * {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.saq-report-root.saq-export-mode .report-header .report-meta-list dt,
+.saq-report-root.saq-export-mode .report-header .report-meta-list dd {
+  display: inline;
+}
+
+/* Section headings: more space so they don't merge with content */
+.saq-report-root.saq-export-mode .report-section {
+  margin-top: 28px;
+}
+
+.saq-report-root.saq-export-mode .report-section > h2 {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  padding-bottom: 4px;
+  line-height: 1.35;
+}
+
+/* Interpretation: stack readiness hero (no side-by-side) */
+.saq-report-root.saq-export-mode .saq-readiness-hero {
+  padding: 18px 20px;
+}
+
+.saq-report-root.saq-export-mode .saq-readiness-hero .saq-readiness-hero-inner {
+  flex-direction: column;
+  gap: 16px;
+}
+
+.saq-report-root.saq-export-mode .saq-readiness-hero .saq-readiness-stats {
+  width: 100%;
+  max-width: none;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 20px;
+}
+
+/* Strengths / Improvement: single column in export */
+.saq-report-root.saq-export-mode .saq-strengths-panel {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.saq-report-root.saq-export-mode .saq-strengths-panel h3,
+.saq-report-root.saq-export-mode .saq-strengths-panel .saq-strengths-desc {
+  font-size: 0.8125rem;
+}
+
+.saq-report-root.saq-export-mode .saq-strengths-panel ul {
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* Theme snapshot & summary cards: stable spacing */
+.saq-report-root.saq-export-mode .saq-theme-snapshot,
+.saq-report-root.saq-export-mode .saq-strategic-card {
+  padding: 16px 18px;
+}
+
+.saq-report-root.saq-export-mode .saq-theme-snapshot h3,
+.saq-report-root.saq-export-mode .saq-strategic-card h3 {
+  font-size: 0.9375rem;
+  margin-bottom: 6px;
+}
+
+/* Theme Readiness Snapshot: export-friendly layout, no awkward truncation */
+.saq-report-root.saq-export-mode .saq-theme-snapshot .saq-theme-snapshot-desc {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
+.saq-report-root.saq-export-mode .saq-theme-snapshot .saq-theme-snapshot-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.saq-report-root.saq-export-mode .saq-theme-snapshot .saq-theme-snapshot-row {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.saq-report-root.saq-export-mode .saq-theme-snapshot .saq-theme-snapshot-row:last-child {
+  border-bottom: none;
+}
+
+.saq-report-root.saq-export-mode .saq-theme-snapshot .saq-export-no-truncate {
+  max-width: none;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  word-break: break-word;
+}
+
+.saq-report-root.saq-export-mode .saq-summary-card dt {
+  font-size: 0.75rem;
+}
+
+.saq-report-root.saq-export-mode .saq-summary-card dd {
+  font-size: 0.9375rem;
+}
+
+/* Action group heading */
+.saq-report-root.saq-export-mode .saq-action-group h3 {
+  font-size: 0.9375rem;
+  margin-bottom: 10px;
+}
+
+.saq-report-root.saq-export-mode .saq-action-group .saq-action-list {
+  gap: 18px;
+}
+
+.saq-report-root.saq-export-mode .report-section-first {
+  margin-top: 0;
+}
+
+.saq-report-root.saq-export-mode .saq-action-plan-intro {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top-width: 2px;
+}
+
+.saq-report-root.saq-export-mode .saq-action-plan-intro h2 {
+  font-size: 1.125rem;
+}
+
+/* Action item cards get spacing from component (stacked metadata when exportMode) */
+.saq-report-root.saq-export-mode .saq-action-item-card {
+  padding: 14px 16px;
+}

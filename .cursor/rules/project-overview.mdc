@@ -1,0 +1,23 @@
+---
+description: SAQ project mission, scope, and global guardrails
+alwaysApply: true
+---
+
+# SAQ Project Overview
+
+- The SAQ tool provides sustainability self-assessment for research infrastructures, datacenters, and organizations.
+- Primary outputs: capability/readiness baseline, priority gaps, action plans, dashboard views, and report/PDF export.
+- Stack: Next.js App Router, React, Tailwind CSS, Supabase, html2canvas/jsPDF for report export.
+
+## Session Defaults
+
+- Start from existing architecture and phrasing; avoid introducing alternate SAQ concepts.
+- Keep report language stakeholder-friendly: baseline-oriented, not certification-decision language.
+- Apply focused rules from `architecture.mdc`, `saq-engine.mdc`, `ui-dashboard-report.mdc`, and `supabase-persistence.mdc` based on files being edited.
+
+## Canonical Human Docs
+
+- `docs/SAQ_PROJECT_CONTEXT.md`
+- `docs/SAQ_ARCHITECTURE.md`
+- `docs/SAQ_DEVELOPMENT_WORKFLOW.md`
+- `docs/SAQ_SUPABASE_SETUP.md`

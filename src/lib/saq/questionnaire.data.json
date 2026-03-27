@@ -1,0 +1,1350 @@
+{
+  "themes": [
+    {
+      "id": "governance-and-compliance",
+      "title": "Governance and Compliance"
+    },
+    {
+      "id": "stakeholder-engagement-and-awareness",
+      "title": "Stakeholder Engagement and Awareness"
+    },
+    {
+      "id": "energy-efficiency-and-decarbonisation",
+      "title": "Energy Efficiency and Decarbonisation"
+    },
+    {
+      "id": "environmental-monitoring-and-impact",
+      "title": "Environmental Monitoring and Impact"
+    },
+    {
+      "id": "pollution-waste-and-circularity",
+      "title": "Pollution, Waste, and Circularity"
+    },
+    {
+      "id": "water-and-ecosystems",
+      "title": "Water and Ecosystems"
+    },
+    {
+      "id": "lifecycle-integration",
+      "title": "Lifecycle Integration"
+    }
+  ],
+  "scopeItems": [
+    {
+      "id": "G1",
+      "themeId": "governance-and-compliance",
+      "code": "G1",
+      "label": "G1: Alignment with relevant EU regulations (CSRD, ESRS, EED, ESPR, WEEE, LCA, ISO14040, ISO14044)"
+    },
+    {
+      "id": "G2",
+      "themeId": "governance-and-compliance",
+      "code": "G2",
+      "label": "G2: Existence of a formal environmental sustainability strategy"
+    },
+    {
+      "id": "G3",
+      "themeId": "governance-and-compliance",
+      "code": "G3",
+      "label": "G3: Defined roles and responsibilities for sustainability"
+    },
+    {
+      "id": "G4",
+      "themeId": "governance-and-compliance",
+      "code": "G4",
+      "label": "G4: Inclusion of sustainability in internal policies or quality systems"
+    },
+    {
+      "id": "G5",
+      "themeId": "governance-and-compliance",
+      "code": "G5",
+      "label": "G5: Inclusion of sustainability in procurement or supplier management"
+    },
+    {
+      "id": "S1",
+      "themeId": "stakeholder-engagement-and-awareness",
+      "code": "S1",
+      "label": "S1: Sustainability awareness/training for staff"
+    },
+    {
+      "id": "S2",
+      "themeId": "stakeholder-engagement-and-awareness",
+      "code": "S2",
+      "label": "S2: Involvement of stakeholders in environmental planning"
+    },
+    {
+      "id": "S3",
+      "themeId": "stakeholder-engagement-and-awareness",
+      "code": "S3",
+      "label": "S3: Transparent communication of environmental performance"
+    },
+    {
+      "id": "E1",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "code": "E1",
+      "label": "E1: Adoption of renewable energy sources"
+    },
+    {
+      "id": "E2",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "code": "E2",
+      "label": "E2: AI-driven workload or energy optimisation"
+    },
+    {
+      "id": "E3",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "code": "E3",
+      "label": "E3: Waste heat recovery or reuse strategies"
+    },
+    {
+      "id": "E4",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "code": "E4",
+      "label": "E4: Power Usage Effectiveness (PUE) tracking and optimisation"
+    },
+    {
+      "id": "E5",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "code": "E5",
+      "label": "E5: Carbon Use Effectiveness (CUE) tracking and reduction"
+    },
+    {
+      "id": "E6",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "code": "E6",
+      "label": "E6: Flexible energy usage or smart grid responsiveness"
+    },
+    {
+      "id": "M1",
+      "themeId": "environmental-monitoring-and-impact",
+      "code": "M1",
+      "label": "M1: Measurement of environmental KPIs (GHG, energy, water, waste)"
+    },
+    {
+      "id": "M2",
+      "themeId": "environmental-monitoring-and-impact",
+      "code": "M2",
+      "label": "M2: Use of environmental metrics in planning and reporting"
+    },
+    {
+      "id": "M3",
+      "themeId": "environmental-monitoring-and-impact",
+      "code": "M3",
+      "label": "M3: Lifecycle-based environmental impact assessment (based on LCA methodology)"
+    },
+    {
+      "id": "M4",
+      "themeId": "environmental-monitoring-and-impact",
+      "code": "M4",
+      "label": "M4: Use of WUE (Water Usage Effectiveness) or similar water metrics"
+    },
+    {
+      "id": "M5",
+      "themeId": "environmental-monitoring-and-impact",
+      "code": "M5",
+      "label": "M5: Implementation of monitoring tools/platforms"
+    },
+    {
+      "id": "P1",
+      "themeId": "pollution-waste-and-circularity",
+      "code": "P1",
+      "label": "P1: Reduction of operational waste (incl. e-waste)"
+    },
+    {
+      "id": "P2",
+      "themeId": "pollution-waste-and-circularity",
+      "code": "P2",
+      "label": "P2: End-of-life management for equipment"
+    },
+    {
+      "id": "P3",
+      "themeId": "pollution-waste-and-circularity",
+      "code": "P3",
+      "label": "P3: Circular IT practices (reuse, remanufacturing, modularity)"
+    },
+    {
+      "id": "P4",
+      "themeId": "pollution-waste-and-circularity",
+      "code": "P4",
+      "label": "P4: Pollution control (air, water, soil)"
+    },
+    {
+      "id": "P5",
+      "themeId": "pollution-waste-and-circularity",
+      "code": "P5",
+      "label": "P5: Use of low-impact or non-toxic materials"
+    },
+    {
+      "id": "W1",
+      "themeId": "water-and-ecosystems",
+      "code": "W1",
+      "label": "W1: Water usage monitoring and reduction strategies"
+    },
+    {
+      "id": "W2",
+      "themeId": "water-and-ecosystems",
+      "code": "W2",
+      "label": "W2: Impact on local ecosystems or biodiversity"
+    },
+    {
+      "id": "W3",
+      "themeId": "water-and-ecosystems",
+      "code": "W3",
+      "label": "W3: Rainwater harvesting, reuse, or runoff management"
+    },
+    {
+      "id": "W4",
+      "themeId": "water-and-ecosystems",
+      "code": "W4",
+      "label": "W4: Water-based cooling systems and water efficiency strategies"
+    },
+    {
+      "id": "L1",
+      "themeId": "lifecycle-integration",
+      "code": "L1",
+      "label": "L1: Sustainability embedded in the design phase"
+    },
+    {
+      "id": "L2",
+      "themeId": "lifecycle-integration",
+      "code": "L2",
+      "label": "L2: Consideration of sustainability during implementation"
+    },
+    {
+      "id": "L3",
+      "themeId": "lifecycle-integration",
+      "code": "L3",
+      "label": "L3: Operational sustainability practices"
+    },
+    {
+      "id": "L4",
+      "themeId": "lifecycle-integration",
+      "code": "L4",
+      "label": "L4: Decommissioning/termination phase planning"
+    }
+  ],
+  "questions": [
+    {
+      "id": "G1.1",
+      "themeId": "governance-and-compliance",
+      "scopeId": "G1",
+      "code": "G1.1",
+      "text": "To what extent is the RI aligned with relevant EU environmental regulations such as CSRD, ESRS, EED, ESPR, WEEE, LCA, ISO14040, ISO14044?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "CSRD, ESRS E1-E5,  ESPR, EED, WEEE, LCA, ISO14040, ISO14044",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "The RI is not actively considering EU environmental regulations or is unaware of specific obligations.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Conduct a regulatory gap analysis to identify which EU environmental regulations apply and where the RI is currently non-compliant. Engage legal or compliance expertise to support interpretation if needed."
+        },
+        {
+          "score": 2,
+          "description": "The RI is aware of applicable regulations and has initiated some exploratory or preparatory activities, but there is no structured compliance plan.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Update internal documentation and procedures to close identified regulatory gaps. Begin implementing key compliance actions with clear timelines and responsibilities."
+        },
+        {
+          "score": 3,
+          "description": "The RI has mapped relevant regulations, assigned responsibilities, and embedded compliance requirements into formal policies and operational procedures.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No further action required. Maintain alignment by reviewing regulatory changes annually and updating internal policies accordingly."
+        }
+      ]
+    },
+    {
+      "id": "G1.2",
+      "themeId": "governance-and-compliance",
+      "scopeId": "G1",
+      "code": "G1.2",
+      "text": "Has the RI conducted a review or gap analysis to identify which regulations apply and how they are addressed?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "CSRD, ESRS E1-E5, ESPR, WEEE",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No structured review or gap analysis has been conducted; awareness of obligations is minimal or outdated.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Initiate a structured regulatory review to identify applicable EU regulations (e.g. CSRD, ESRS, EED, ESPR, WEEE). Engage relevant internal or external expertise and document initial findings."
+        },
+        {
+          "score": 2,
+          "description": "A basic review has been done; some gaps identified, but follow-up actions are limited or informal.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Expand and update the regulatory gap analysis. Clarify which obligations are partially addressed, and prepare an action plan to resolve any gaps identified."
+        },
+        {
+          "score": 3,
+          "description": "A comprehensive, up-to-date gap analysis is in place; regularly reviewed and informs compliance actions.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain and periodically update the gap analysis in line with evolving legislation and internal priorities."
+        }
+      ]
+    },
+    {
+      "id": "G2.1",
+      "themeId": "governance-and-compliance",
+      "scopeId": "G2",
+      "code": "G2.1",
+      "text": "Is there a documented environmental sustainability strategy in place, endorsed by leadership and periodically updated?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "ESRS E1, ISO 14001",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No environmental sustainability strategy exists, or it is informal and not institutionally endorsed.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Draft a documented environmental sustainability strategy that outlines goals, scope, and key priorities. Secure leadership engagement to initiate endorsement."
+        },
+        {
+          "score": 2,
+          "description": "A strategy exists and covers key areas, but it is not comprehensive or regularly reviewed.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Formalise leadership endorsement of the strategy and ensure it includes a mechanism for periodic updates. Begin integrating it into RI-level decision-making."
+        },
+        {
+          "score": 3,
+          "description": "A formal strategy is in place, endorsed by leadership, reviewed regularly, and linked to operational planning.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain periodic reviews and ensure the strategy remains aligned with evolving sustainability goals and regulations."
+        }
+      ]
+    },
+    {
+      "id": "G3.1",
+      "themeId": "governance-and-compliance",
+      "scopeId": "G3",
+      "code": "G3.1",
+      "text": "Are roles and responsibilities for environmental sustainability clearly assigned across relevant functions within the RI?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "ISO 14001, CSRD",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No roles or responsibilities are defined for sustainability-related actions.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify key functions and assign clear responsibilities for environmental sustainability. Ensure responsibility is not siloed but shared across operational and strategic roles."
+        },
+        {
+          "score": 2,
+          "description": "Some roles are assigned, but responsibilities are not clearly documented or consistently applied.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Document the assigned responsibilities formally (e.g. in organisational charts, role descriptions, quality systems) and ensure they are communicated internally."
+        },
+        {
+          "score": 3,
+          "description": "Roles and responsibilities are formally assigned, documented, and integrated into operational procedures.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Sustain clarity and alignment of responsibilities, and update assignments when organisational roles or sustainability goals evolve."
+        }
+      ]
+    },
+    {
+      "id": "G4.1",
+      "themeId": "governance-and-compliance",
+      "scopeId": "G4",
+      "code": "G4.1",
+      "text": "To what extent is environmental sustainability integrated into the RI’s internal policies, management systems, or quality frameworks?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "ISO 14001, CSRD, EMAS",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Environmental considerations are not referenced in internal policies or management systems.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Review existing policies, management systems, and quality frameworks to identify where environmental sustainability is absent. Begin drafting updates or addenda that reflect sustainability considerations."
+        },
+        {
+          "score": 2,
+          "description": "Sustainability is mentioned in some policies or quality processes, but integration is limited or inconsistent.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Expand integration of sustainability elements across internal systems. Ensure alignment with recognised frameworks such as ISO 14001 or ISO 9001 (with sustainability add-ons), and involve relevant departments in updates."
+        },
+        {
+          "score": 3,
+          "description": "Environmental sustainability is systematically integrated across internal policies, quality management, and procedures.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Continue internal reviews to maintain full integration and alignment with emerging sustainability standards."
+        }
+      ]
+    },
+    {
+      "id": "G5.1",
+      "themeId": "governance-and-compliance",
+      "scopeId": "G5",
+      "code": "G5.1",
+      "text": "Does the RI include environmental sustainability criteria in procurement processes and supplier evaluations?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "% of suppliers evaluated with environmental criteria (optional)",
+      "reference": "ISO 20400, ESRS G1, ESRS E5, EU Green Public Procurement Guidelines",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Environmental criteria are not considered in procurement or supplier evaluation.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Begin integrating basic environmental sustainability criteria into procurement guidelines and supplier selection processes. Reference relevant standards (e.g. EU Green Public Procurement) where applicable."
+        },
+        {
+          "score": 2,
+          "description": "Some environmental criteria are used, but not systematically or across all procurement categories.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Expand and formalise sustainability criteria in procurement documents and supplier contracts. Ensure criteria are measurable and consistently applied across purchases."
+        },
+        {
+          "score": 3,
+          "description": "Environmental sustainability is consistently integrated into procurement processes and supplier assessments.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain criteria updates and consider supplier engagement strategies to support continuous sustainability improvement."
+        }
+      ]
+    },
+    {
+      "id": "S1.1",
+      "themeId": "stakeholder-engagement-and-awareness",
+      "scopeId": "S1",
+      "code": "S1.1",
+      "text": "To what extent does the RI provide staff training or awareness programmes on environmental sustainability topics relevant to their roles?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "% of staff trained annually, number of training sessions",
+      "reference": "ISO 14001, ESRS",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No sustainability training or awareness activities are in place.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Develop and deliver basic sustainability awareness sessions for staff. Tailor content to general operational relevance and RI objectives."
+        },
+        {
+          "score": 2,
+          "description": "Some ad hoc or optional training is available, but not systematic.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Establish structured training programmes with role-specific content. Include periodic refreshers and track staff participation and feedback."
+        },
+        {
+          "score": 3,
+          "description": "Structured, role-specific sustainability training is delivered regularly and tracked.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain comprehensive training programmes and consider integrating sustainability awareness into onboarding and performance reviews."
+        }
+      ]
+    },
+    {
+      "id": "S2.1",
+      "themeId": "stakeholder-engagement-and-awareness",
+      "scopeId": "S2",
+      "code": "S2.1",
+      "text": "Are relevant stakeholders (e.g. users, suppliers, partners) engaged in environmental planning or sustainability goal-setting processes?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "ISO 14001, ESRS 1",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Stakeholders are not engaged in environmental planning or goal setting.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify key stakeholder groups and initiate basic engagement on environmental topics (e.g. surveys, meetings, informal consultations)."
+        },
+        {
+          "score": 2,
+          "description": "Stakeholder input is sought occasionally but not structured or consistently applied.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Develop a structured stakeholder engagement plan that includes regular input into sustainability planning or goal-setting processes. Document outcomes and integrate feedback."
+        },
+        {
+          "score": 3,
+          "description": "Stakeholders are regularly and systematically involved in environmental planning processes.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Continue proactive stakeholder engagement and track participation and influence on environmental decisions."
+        }
+      ]
+    },
+    {
+      "id": "S3.1",
+      "themeId": "stakeholder-engagement-and-awareness",
+      "scopeId": "S3",
+      "code": "S3.1",
+      "text": "Does the RI regularly communicate its environmental performance, actions, or goals to internal and external stakeholders?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "Frequency and scope of communications (e.g., reports/year)",
+      "reference": "CSRD, ESRS E1, ISO 14063",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Environmental performance is not communicated externally or internally.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify key performance metrics and develop internal channels for sharing environmental information (e.g. newsletters, intranet updates)."
+        },
+        {
+          "score": 2,
+          "description": "Some communications occur, but are informal or irregular.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Identify key performance metrics and develop internal channels for sharing environmental information (e.g. newsletters, intranet updates)."
+        },
+        {
+          "score": 3,
+          "description": "Environmental performance is communicated regularly, transparently, and in structured formats.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "Establish regular reporting cycles and communication plans for both internal and external audiences. Include key performance indicators, progress on goals, and future plans."
+        }
+      ]
+    },
+    {
+      "id": "E1.1",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "scopeId": "E1",
+      "code": "E1.1",
+      "text": "What proportion of the RI’s energy consumption is sourced from renewable energy, and how is this verified?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Energy",
+      "associatedMetric": "% of energy from renewable sources",
+      "reference": "ISO 50001, ESRS E1, EU Renewable Energy Directive",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "The RI does not use or track renewable energy usage.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Assess the current energy mix and identify opportunities to procure or transition to renewable energy sources. Start collecting data and documentation to verify sources (e.g. supplier declarations, energy certificates)."
+        },
+        {
+          "score": 2,
+          "description": "Some energy comes from renewable sources, but tracking is limited or informal.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Increase the share of renewable energy through updated contracts or on-site generation. Implement processes for regular verification and reporting (e.g. through Guarantees of Origin, utility audits)."
+        },
+        {
+          "score": 3,
+          "description": "A high proportion of energy is sourced from renewables, verified through formal documentation or contracts.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Continue monitoring and ensure transparency in reporting renewable energy sourcing and verification."
+        }
+      ]
+    },
+    {
+      "id": "E2.1",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "scopeId": "E2",
+      "code": "E2.1",
+      "text": "Are AI or automation systems used to optimise energy consumption across compute, cooling, or other infrastructure components?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Energy",
+      "associatedMetric": "Estimated energy savings (%) from AI/automation",
+      "reference": "ISO 50001, EN 50600-4-8 (Energy Reuse)",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No AI or automation tools are in place for energy optimisation.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify infrastructure areas with high energy use and evaluate the potential of AI or automation tools for energy optimisation. Initiate pilot projects or feasibility assessments."
+        },
+        {
+          "score": 2,
+          "description": "Some systems exist, but usage is limited to specific components or lacks ongoing refinement.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Expand use of AI-driven or automated systems for energy optimisation in key areas (e.g. dynamic workload distribution, smart cooling). Document energy savings and lessons learned."
+        },
+        {
+          "score": 3,
+          "description": "Advanced AI/automation is used systematically across operations to monitor and optimise energy use.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain optimisation systems and review performance periodically to identify further improvement opportunities."
+        }
+      ]
+    },
+    {
+      "id": "E3.1",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "scopeId": "E3",
+      "code": "E3.1",
+      "text": "Does the RI implement strategies to recover or reuse waste heat generated by infrastructure?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Energy",
+      "associatedMetric": "Energy reuse factor (ERF), % of recovered heat reused",
+      "reference": "EN 50600-4-6, ISO 50001",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No waste heat recovery strategies are in place or considered.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Assess the feasibility of heat recovery based on infrastructure type and thermal load. Identify potential use cases (e.g. heating buildings, district heating, internal reuse)."
+        },
+        {
+          "score": 2,
+          "description": "Opportunities have been identified, and partial recovery is implemented in limited areas.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Implement basic heat recovery systems where feasible. Monitor effectiveness and explore opportunities to expand reuse or integrate with external systems."
+        },
+        {
+          "score": 3,
+          "description": "Waste heat is consistently captured and reused through formal systems and integrated planning.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Continue optimising heat recovery systems and track performance against energy-saving targets."
+        }
+      ]
+    },
+    {
+      "id": "E4.1",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "scopeId": "E4",
+      "code": "E4.1",
+      "text": "Is the RI’s PUE monitored regularly, and are efforts in place to optimise it over time?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Energy",
+      "associatedMetric": "Power Usage Effectiveness (PUE)",
+      "reference": "ISO/IEC 30134-2, EN 50600-4-2, EU CoC on Data Centre Energy Efficiency",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "PUE is not monitored or known.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Begin monitoring Power Usage Effectiveness (PUE) at a basic level. Install or configure metering infrastructure to enable regular data collection."
+        },
+        {
+          "score": 2,
+          "description": "PUE is monitored but not regularly optimised or benchmarked.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Establish routine monitoring of PUE and identify areas where efficiency can be improved (e.g. cooling systems, power distribution). Set internal targets for optimisation."
+        },
+        {
+          "score": 3,
+          "description": "PUE is tracked, benchmarked, and used to inform continuous energy efficiency improvements.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain performance tracking and review optimisation efforts to stay aligned with industry benchmarks and internal goals."
+        }
+      ]
+    },
+    {
+      "id": "E5.1",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "scopeId": "E5",
+      "code": "E5.1",
+      "text": "Is CUE calculated and used as a metric for assessing carbon performance of the RI’s operations?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Climate Change",
+      "associatedMetric": "Carbon Usage Effectiveness (CUE)",
+      "reference": "ISO/IEC 30134-3, GHG Protocol Scope 2 Guidance",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "CUE is not calculated or considered in RI operations.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Familiarise the team with Carbon Usage Effectiveness (CUE) and assess whether sufficient data exists to begin basic calculations. Identify carbon-intensive operational areas."
+        },
+        {
+          "score": 2,
+          "description": "CUE is estimated or partially tracked, but not actively used in decision-making.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Implement regular CUE calculations and use the results to identify inefficiencies or opportunities for emissions reduction. Integrate CUE into internal sustainability reporting."
+        },
+        {
+          "score": 3,
+          "description": "CUE is regularly calculated, reported, and informs carbon reduction strategies.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain consistent tracking and consider publishing or benchmarking CUE data to support transparency and best practices."
+        }
+      ]
+    },
+    {
+      "id": "E6.1",
+      "themeId": "energy-efficiency-and-decarbonisation",
+      "scopeId": "E6",
+      "code": "E6.1",
+      "text": "Does the RI participate in energy flexibility initiatives, such as demand response or smart grid integration?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Energy",
+      "associatedMetric": "Participation in flexibility programs; % load modulated during events",
+      "reference": "EU Electricity Directive, EN 50600-4-7 (Availability and resilience), Smart Grid Task Force reports",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "The RI does not participate in any energy flexibility or smart grid schemes.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Explore opportunities to participate in local or regional energy flexibility schemes, such as demand response programmes or grid-interactive energy management. Assess technical feasibility and potential benefits."
+        },
+        {
+          "score": 2,
+          "description": "The RI has the technical capacity and is exploring or piloting flexibility participation.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Participate in one or more energy flexibility initiatives. Establish internal protocols for responding to external grid signals or adjusting loads dynamically."
+        },
+        {
+          "score": 3,
+          "description": "The RI actively participates in energy flexibility schemes and can adjust loads in response to grid signals.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain participation and evaluate performance and value of engagement. Look for additional integration points as technology evolves."
+        }
+      ]
+    },
+    {
+      "id": "M1.1",
+      "themeId": "environmental-monitoring-and-impact",
+      "scopeId": "M1",
+      "code": "M1.1",
+      "text": "Which environmental KPIs (e.g. GHG emissions, energy, water, waste) are currently measured and how frequently are they reported?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Climate Change",
+      "associatedMetric": "Number and frequency of reported environmental KPIs",
+      "reference": "ISO 14031, ESRS E1–E5, GHG Protocol, ISO 14064",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Environmental KPIs are not measured or reported.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify key environmental KPIs relevant to RI operations. Begin collecting basic data on at least one dimension (e.g. energy use or waste generation) and define a reporting cadence."
+        },
+        {
+          "score": 2,
+          "description": "Some KPIs are measured and occasionally reported, but coverage or consistency is limited.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Expand KPI measurement to cover multiple impact areas (e.g. GHG, energy, water, waste). Establish consistent reporting processes and assign responsibilities."
+        },
+        {
+          "score": 3,
+          "description": "A comprehensive set of environmental KPIs is regularly monitored, documented, and reviewed.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Continue regular monitoring and explore opportunities to align KPI reporting with external frameworks or certifications."
+        }
+      ]
+    },
+    {
+      "id": "M2.1",
+      "themeId": "environmental-monitoring-and-impact",
+      "scopeId": "M2",
+      "code": "M2.1",
+      "text": "To what extent are environmental metrics integrated into the RI’s strategic planning or operational decision-making?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Climate Change",
+      "associatedMetric": "Number of decisions/plans referencing environmental KPIs (optional, qualitative)",
+      "reference": "ISO 14001, ISO 14031, ESRS E1",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Environmental metrics are not used to inform planning or operational decisions.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify opportunities to integrate basic environmental metrics (e.g. energy use, GHG emissions) into routine planning or procurement decisions. Raise awareness among decision-makers."
+        },
+        {
+          "score": 2,
+          "description": "Some metrics are referenced in planning, but not systematically or with limited influence.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Incorporate environmental metrics into key strategic documents, project evaluations, or budget planning. Ensure decision-makers have access to relevant data during planning cycles."
+        },
+        {
+          "score": 3,
+          "description": "Environmental metrics are regularly used to guide strategic and operational decision-making.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain integration and periodically evaluate the influence of metrics on outcomes to ensure environmental performance is driving decisions."
+        }
+      ]
+    },
+    {
+      "id": "M3.1",
+      "themeId": "environmental-monitoring-and-impact",
+      "scopeId": "M3",
+      "code": "M3.1",
+      "text": "Has the RI conducted or applied lifecycle assessments (LCA) to evaluate its environmental impact across different phases, including monitoring of Global Warming Potential (GWP) and Cumulative Energy Demand (CED)?",
+      "lifecyclePhase": "Cross-cutting",
+      "environmentalDimension": "Climate Change",
+      "associatedMetric": "Number or coverage of LCA studies conducted",
+      "reference": "ISO 14040, ISO 14044, ESRS E1",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No lifecycle assessments have been conducted or considered.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Build internal awareness of LCA methods and identify opportunities to apply LCA to RI infrastructure or service components. Consider piloting an LCA for a specific lifecycle phase or asset."
+        },
+        {
+          "score": 2,
+          "description": "Some LCA activities have been initiated, covering limited operations or infrastructure.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Apply LCA to selected infrastructure or services across multiple lifecycle phases. Use the results to inform design or procurement decisions."
+        },
+        {
+          "score": 3,
+          "description": "LCA is systematically used to assess and mitigate environmental impact across RI lifecycle phases.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Continue refining LCA approaches and integrating results into sustainability reporting and strategic planning."
+        }
+      ]
+    },
+    {
+      "id": "M4.1",
+      "themeId": "environmental-monitoring-and-impact",
+      "scopeId": "M4",
+      "code": "M4.1",
+      "text": "Is WUE or any comparable metric tracked and used to assess the RI’s water efficiency performance?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Waste",
+      "associatedMetric": "Water Usage Effectiveness (WUE)",
+      "reference": "ISO/IEC 30134-9, ISO 14046 (Water footprint)",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Water metrics like WUE are not tracked or are unknown.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Review current water usage practices and assess the feasibility of applying Water Usage Effectiveness (WUE) or a comparable metric. Begin collecting relevant data where possible."
+        },
+        {
+          "score": 2,
+          "description": "WUE or a similar metric is estimated periodically but not used in performance management.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Implement regular tracking of WUE or similar metrics. Use insights to guide efficiency improvements and water-saving initiatives."
+        },
+        {
+          "score": 3,
+          "description": "WUE is regularly calculated, benchmarked, and used to drive technical improvements.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Continue metric tracking and review performance regularly. Consider benchmarking against best practices or sector peers."
+        }
+      ]
+    },
+    {
+      "id": "M5.1",
+      "themeId": "environmental-monitoring-and-impact",
+      "scopeId": "M5",
+      "code": "M5.1",
+      "text": "Are dedicated tools or platforms in place for tracking, visualising, or reporting environmental performance?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "ISO 14031, ISO 50001",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No dedicated environmental monitoring tools or platforms are used.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify suitable tools or platforms for environmental data tracking and reporting. Evaluate whether existing systems (e.g. monitoring software, spreadsheets) meet reporting needs."
+        },
+        {
+          "score": 2,
+          "description": "Basic tools exist but are limited in scope or only partially used.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Implement and configure dedicated tools to track and visualise key environmental indicators. Begin internal reporting and align outputs with decision-making needs."
+        },
+        {
+          "score": 3,
+          "description": "Integrated tools/platforms track and report key indicators across the RI.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain tool usage and explore opportunities for system integration or external disclosure where applicable."
+        }
+      ]
+    },
+    {
+      "id": "P1.1",
+      "themeId": "pollution-waste-and-circularity",
+      "scopeId": "P1",
+      "code": "P1.1",
+      "text": "Are practices in place to reduce operational waste generation, including e-waste from IT systems and equipment?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Waste",
+      "associatedMetric": "Volume of e-waste or operational waste per year",
+      "reference": "WEEE Directive, ISO 14001, EU Circular Economy Action Plan",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No structured practices for waste reduction exist.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify main sources of operational and e-waste. Begin implementing basic waste reduction measures (e.g. paperless processes, proper e-waste disposal procedures)."
+        },
+        {
+          "score": 2,
+          "description": "Some informal or partial practices exist for waste minimisation.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Expand and formalise waste reduction initiatives. Introduce structured e-waste handling, asset tracking, and staff awareness programmes."
+        },
+        {
+          "score": 3,
+          "description": "Formal and systematic waste reduction practices are implemented, tracked, and reviewed.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain active reduction strategies and consider partnerships for certified e-waste recycling or donation schemes."
+        }
+      ]
+    },
+    {
+      "id": "P2.1",
+      "themeId": "pollution-waste-and-circularity",
+      "scopeId": "P2",
+      "code": "P2.1",
+      "text": "Does the RI apply defined procedures for the reuse, recycling, or proper disposal of decommissioned equipment?",
+      "lifecyclePhase": "Termination",
+      "environmentalDimension": "Waste",
+      "associatedMetric": "% of equipment reused/recycled vs. disposed",
+      "reference": "WEEE Directive, ISO 14001, ISO 14006",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No defined procedures for managing end-of-life equipment.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Develop and document procedures for the proper reuse, recycling, or disposal of decommissioned equipment, in compliance with WEEE or relevant regulations."
+        },
+        {
+          "score": 2,
+          "description": "Some practices exist but are informal or inconsistently applied.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Implement procedures and ensure responsible parties follow them consistently. Track decommissioned assets and apply certified disposal or reuse practices."
+        },
+        {
+          "score": 3,
+          "description": "Structured procedures ensure responsible reuse, recycling, or disposal of equipment",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain procedures and consider auditing or reporting results to enhance transparency and continuous improvement."
+        }
+      ]
+    },
+    {
+      "id": "P3.1",
+      "themeId": "pollution-waste-and-circularity",
+      "scopeId": "P3",
+      "code": "P3.1",
+      "text": "Are circular IT principles such as reuse, modularity, or refurbishment applied in procurement or infrastructure management?",
+      "lifecyclePhase": "Design",
+      "environmentalDimension": "Waste",
+      "associatedMetric": "% of IT purchases meeting circularity criteria",
+      "reference": "EU Circular Economy Action Plan, ISO 20400 (Sustainable Procurement)",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Circularity principles are not considered in IT procurement or infrastructure management.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Review procurement and infrastructure policies to identify opportunities to apply circular IT principles (e.g. reuse, modular design, refurbishment). Begin piloting circular approaches in select areas."
+        },
+        {
+          "score": 2,
+          "description": "Some criteria (e.g., reuse, modularity) are considered, but application is limited.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Integrate circular IT requirements into procurement specifications and asset management practices. Collaborate with suppliers to support reuse or refurbishment options."
+        },
+        {
+          "score": 3,
+          "description": "Circular IT principles are systematically embedded into procurement and lifecycle management.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Sustain and refine circular IT practices. Monitor outcomes and explore additional innovation opportunities (e.g. remanufacturing, take-back schemes)."
+        }
+      ]
+    },
+    {
+      "id": "P4.1",
+      "themeId": "pollution-waste-and-circularity",
+      "scopeId": "P4",
+      "code": "P4.1",
+      "text": "Are measures in place to monitor and manage pollution risks related to air, water, or soil emissions from RI operations?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Waste",
+      "associatedMetric": "Presence and scope of pollution monitoring and control measures",
+      "reference": " ISO 14001, EU Industrial Emissions Directive, ESRS E2",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No pollution monitoring or control measures are in place.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify potential pollution risks across RI operations (air, water, soil). Begin planning basic monitoring or mitigation actions in line with legal and environmental standards."
+        },
+        {
+          "score": 2,
+          "description": "Some measures exist for specific risks or processes.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Implement monitoring measures (e.g. emission tracking, discharge controls) and integrate them into operational procedures. Ensure staff are trained on pollution management protocols."
+        },
+        {
+          "score": 3,
+          "description": "Comprehensive monitoring and mitigation measures are in place and reviewed regularly.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain active pollution monitoring and control systems. Conduct periodic reviews and align practices with evolving environmental standards."
+        }
+      ]
+    },
+    {
+      "id": "P5.1",
+      "themeId": "pollution-waste-and-circularity",
+      "scopeId": "P5",
+      "code": "P5.1",
+      "text": "Are environmental criteria applied when selecting materials or products, with preference for low-impact or non-toxic options?",
+      "lifecyclePhase": "Design",
+      "environmentalDimension": "Waste",
+      "associatedMetric": "% of materials/products procured meeting low-impact criteria",
+      "reference": "ESPR (Ecodesign), EU Green Public Procurement Criteria, ISO 14024",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Environmental aspects are not considered in material or product selection.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Introduce environmental criteria into procurement or product selection processes. Begin prioritising low-impact or non-toxic options, especially for high-volume or high-impact categories."
+        },
+        {
+          "score": 2,
+          "description": "Some environmental criteria are applied inconsistently or only for select categories.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Formalise and apply environmental criteria across material/product procurement. Refer to ecolabels or standards (e.g. EU Ecolabel, ISO 14024) where applicable."
+        },
+        {
+          "score": 3,
+          "description": "Environmental criteria are systematically applied across procurement processes.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain current procurement criteria and periodically review for alignment with updated sustainability requirements."
+        }
+      ]
+    },
+    {
+      "id": "W1.1",
+      "themeId": "water-and-ecosystems",
+      "scopeId": "W1",
+      "code": "W1.1",
+      "text": "To what extent does the RI monitor its water consumption and implement strategies to reduce it?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Water",
+      "associatedMetric": "Total water use (m³/year), reduction trend (%)",
+      "reference": "ISO 14046, EU Water Framework Directive",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Water consumption is not monitored and no reduction efforts are planned.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Begin monitoring water usage across relevant operations. Identify key consumption points and explore opportunities for reduction (e.g. fixture upgrades, behavioural campaigns)."
+        },
+        {
+          "score": 2,
+          "description": "Water use is tracked and some reduction measures are informally applied.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Implement structured water management strategies, such as water-efficient technologies or consumption targets. Regularly track and review water usage data."
+        },
+        {
+          "score": 3,
+          "description": "Water use is systematically monitored and targeted reduction plans are implemented and reviewed.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain monitoring and review strategies for continuous improvement or integration into broader environmental reporting."
+        }
+      ]
+    },
+    {
+      "id": "W2.1",
+      "themeId": "water-and-ecosystems",
+      "scopeId": "W2",
+      "code": "W2.1",
+      "text": "Does the RI assess and manage its potential impacts on local ecosystems or biodiversity, particularly for physical infrastructure?",
+      "lifecyclePhase": "Design",
+      "environmentalDimension": "Water",
+      "associatedMetric": "N/A",
+      "reference": "EU Biodiversity Strategy, ISO 14001, ESRS E4",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Ecosystem or biodiversity impacts are not assessed or considered.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Conduct an initial review of how RI activities or infrastructure may affect local ecosystems or biodiversity. Identify areas of sensitivity and potential impact."
+        },
+        {
+          "score": 2,
+          "description": "Some assessments have been conducted, but mitigation actions are limited.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Apply formal assessment methods (e.g. environmental impact assessments, habitat studies) and implement mitigation strategies to address identified risks."
+        },
+        {
+          "score": 3,
+          "description": "Ecosystem impacts are systematically assessed and managed with appropriate mitigation plans.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Continue managing ecosystem impacts through structured processes and periodic reassessments, particularly when expanding or modifying infrastructure."
+        }
+      ]
+    },
+    {
+      "id": "W3.1",
+      "themeId": "water-and-ecosystems",
+      "scopeId": "W3",
+      "code": "W3.1",
+      "text": "Are there systems or practices in place for rainwater harvesting, water reuse, or managing stormwater runoff?",
+      "lifecyclePhase": "Design",
+      "environmentalDimension": "Water",
+      "associatedMetric": "% of captured rainwater reused",
+      "reference": "EU Water Framework Directive, ISO 14046",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No rainwater harvesting or runoff management systems are present or considered.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Assess site infrastructure to identify opportunities for rainwater harvesting or stormwater management. Begin feasibility studies or pilot planning for basic systems."
+        },
+        {
+          "score": 2,
+          "description": "Some measures exist but are limited in scope or capacity.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Install rainwater collection or stormwater control systems. Implement reuse strategies (e.g. for irrigation, cooling) where applicable, and maintain performance records."
+        },
+        {
+          "score": 3,
+          "description": "Rainwater harvesting or runoff systems are well-integrated and used for water reuse or management.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain existing systems and review effectiveness periodically. Explore optimisation opportunities or expand reuse capacity."
+        }
+      ]
+    },
+    {
+      "id": "W4.1",
+      "themeId": "water-and-ecosystems",
+      "scopeId": "W4",
+      "code": "W4.1",
+      "text": "Does the RI use water-based cooling systems, and are measures in place to optimise their water efficiency and minimise environmental impact?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Water",
+      "associatedMetric": "Water Usage Effectiveness (WUE), annual water withdrawal for cooling",
+      "reference": "ISO 30134-9, ESRS E3, EU CoC for Data Centres",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Water-based cooling systems are used, but water consumption is not actively monitored or optimised. No clear strategy exists for minimising impact.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "High",
+          "recommendedAction": "Begin tracking water usage related to cooling systems. Identify inefficiencies and research available technologies for reducing consumption or shifting to closed-loop or hybrid systems."
+        },
+        {
+          "score": 2,
+          "description": "Water consumption for cooling is monitored, and efficiency strategies (e.g. recycling, closed-loop systems) are partially implemented. Environmental considerations are acknowledged but not systematically applied.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Implement water-saving strategies such as evaporative cooling optimisation, water reuse, or integration of hybrid cooling. Document performance and begin setting reduction goals."
+        },
+        {
+          "score": 3,
+          "description": "Water efficiency is embedded in cooling system design and operation. WUE is tracked, targets are set, and strategies are actively used to reduce water use and minimise ecological impact.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain current best practices, regularly review WUE performance, and update systems based on evolving best-in-class approaches."
+        }
+      ]
+    },
+    {
+      "id": "L1.1",
+      "themeId": "lifecycle-integration",
+      "scopeId": "L1",
+      "code": "L1.1",
+      "text": "To what extent are sustainability considerations integrated into the design and planning of new infrastructure or services?",
+      "lifecyclePhase": "Design",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "ISO 14006, ESRS E1, ESPR, EU Taxonomy (Substantial Contribution Criteria)",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Sustainability is not considered in the design phase.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Introduce sustainability checkpoints into design and planning processes. Begin referencing basic sustainability principles or guidelines during early-stage decision-making."
+        },
+        {
+          "score": 2,
+          "description": "Some sustainability aspects are reviewed, but not systematically.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Embed defined sustainability criteria into design frameworks, including materials selection, energy efficiency, and end-of-life considerations. Document decisions and outcomes."
+        },
+        {
+          "score": 3,
+          "description": "Sustainability is fully embedded in design/planning processes, with clear criteria and review steps.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain integrated sustainability planning and periodically review alignment with updated standards and organisational goals."
+        }
+      ]
+    },
+    {
+      "id": "L2.1",
+      "themeId": "lifecycle-integration",
+      "scopeId": "L2",
+      "code": "L2.1",
+      "text": "Are sustainability criteria applied during the implementation or deployment of infrastructure components and systems?",
+      "lifecyclePhase": "Implementation",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "ISO 14001, ISO 14006, EU GPP criteria",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No sustainability criteria are applied during implementation.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify implementation phases where sustainability can be applied (e.g. material sourcing, vendor selection, construction). Begin including basic criteria in execution checklists."
+        },
+        {
+          "score": 2,
+          "description": "Some criteria are applied in specific areas, but inconsistently.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Formalise sustainability criteria within procurement and deployment procedures. Monitor compliance and document implementation outcomes."
+        },
+        {
+          "score": 3,
+          "description": "Sustainability criteria are systematically applied during all implementation activities.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain and review implementation practices to ensure continued alignment with sustainability standards and operational objectives."
+        }
+      ]
+    },
+    {
+      "id": "L3.1",
+      "themeId": "lifecycle-integration",
+      "scopeId": "L3",
+      "code": "L3.1",
+      "text": "What sustainability practices are in place for the operation and maintenance of the RI’s infrastructure and services?",
+      "lifecyclePhase": "Operation",
+      "environmentalDimension": "Non-environmental",
+      "associatedMetric": "N/A",
+      "reference": "ISO 14001, ISO 50001, ESRS, ESPR, EED",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "No defined sustainability practices exist during operational phases.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Identify operational areas where sustainability practices can be introduced (e.g. energy management, resource efficiency, preventive maintenance). Begin applying basic principles."
+        },
+        {
+          "score": 2,
+          "description": "Some practices are implemented, but lack consistency or systematic monitoring.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Implement structured sustainability practices into operations and maintenance (e.g. energy tracking, green cleaning protocols, lifecycle extension). Monitor effectiveness and adjust as needed."
+        },
+        {
+          "score": 3,
+          "description": "Sustainability practices are embedded in operations, regularly reviewed, and improved.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain existing practices and explore new opportunities to enhance operational sustainability."
+        }
+      ]
+    },
+    {
+      "id": "L4.1",
+      "themeId": "lifecycle-integration",
+      "scopeId": "L4",
+      "code": "L4.1",
+      "text": "Does the RI include environmental considerations in its decommissioning or termination plans for infrastructure or services?",
+      "lifecyclePhase": "Termination",
+      "environmentalDimension": "Waste",
+      "associatedMetric": "N/A",
+      "reference": "ISO 14001, WEEE Directive, ISO 14006",
+      "answerOptions": [
+        {
+          "score": 1,
+          "description": "Environmental aspects are not addressed during decommissioning.",
+          "impactMagnitude": "High",
+          "impactLikelihood": "High",
+          "recommendedAction": "Review existing decommissioning or termination procedures and identify gaps related to environmental impact (e.g. equipment disposal, site remediation). Draft basic guidelines for responsible end-of-life practices."
+        },
+        {
+          "score": 2,
+          "description": "Some end-of-life measures are in place, but not consistently or formally applied.",
+          "impactMagnitude": "Medium",
+          "impactLikelihood": "Medium",
+          "recommendedAction": "Integrate formal environmental considerations into decommissioning plans, including reuse, recycling, and waste minimisation. Assign responsibilities and track execution."
+        },
+        {
+          "score": 3,
+          "description": "Environmental considerations are embedded in decommissioning plans and routinely followed.",
+          "impactMagnitude": "Low",
+          "impactLikelihood": "Low",
+          "recommendedAction": "No action needed. Maintain current decommissioning protocols and review periodically for alignment with best practices and emerging requirements."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "components\\saq\\AssessmentReport.tsx -> ./AssessmentReportPDF": {
+    "id": "components\\saq\\AssessmentReport.tsx -> ./AssessmentReportPDF",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_saq_AssessmentReportPDF_tsx.js"
+    ]
+  },
+  "components\\saq\\AssessmentReport.tsx -> @react-pdf/renderer": {
+    "id": "components\\saq\\AssessmentReport.tsx -> @react-pdf/renderer",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_react-pdf_renderer_lib_react-pdf_browser_js.js"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+---
+description: Persistence boundaries and safe Supabase update practices
+globs: "{src/lib/supabase/**/*.ts,src/lib/saq/assessment.repository.ts,supabase/migrations/**/*.sql}"
+alwaysApply: false
+---
+
+# Supabase Persistence Rules
+
+Applies to `src/lib/supabase/`, `src/lib/saq/assessment.repository.ts`, and migrations.
+
+## Persisted Runtime State
+
+- `assessments`
+- `assessment_scope_selections`
+- `assessment_answers`
+- `assessment_action_items` (metadata fields such as effort/leader/deadline/status/remarks)
+
+## Not Persisted
+
+- Static questionnaire configuration.
+- Derived results: completion summaries, pass/target outcomes, priorities, recommendations, interpretations.
+
+## Repository Boundary Rules
+
+- Keep Supabase access inside repository/client modules.
+- Map DB rows to domain types in repositories; keep UI and engine unaware of DB row shape.
+- Prefer idempotent upsert/update patterns for per-assessment runtime tables.
+- Do not add questionnaire structure tables unless the architecture decision is explicitly changed.
+
+## Safe Migration Practices
+
+- Additive schema changes first; avoid destructive changes without migration plan.
+- Keep migration intent documented in `docs/SAQ_SUPABASE_SETUP.md` when setup steps change.

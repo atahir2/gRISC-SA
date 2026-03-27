@@ -1,0 +1,28 @@
+---
+description: UI rules for SAQ dashboard and report/export pages
+globs: "{src/components/saq/**/*.tsx,src/app/saq/dashboard/**/*.tsx,src/app/saq/report/**/*.tsx}"
+alwaysApply: false
+---
+
+# Dashboard and Report UI Rules
+
+Applies to `src/components/saq/`, `src/app/saq/dashboard/`, and `src/app/saq/report/`.
+
+## Dashboard
+
+- Keep dashboard hierarchy clear: at-a-glance metrics, capability/priority summaries, theme and action distribution.
+- Use engine outputs as source data.
+
+## Report and PDF
+
+- The report page is the source of truth for export content.
+- Export-specific layout/styling may diverge from browser layout for readability and capture stability.
+- Preserve stakeholder-facing hierarchy: purpose/methodology, interpretation, summaries, action planning.
+- Keep visuals restrained and professional; prioritize scanability over dense UI patterns.
+
+## Editing Guidance
+
+- Reuse existing report primitives (`ReportSection`, summary/action cards, interpretation blocks).
+- Minimize duplication between cover metadata and body sections.
+- Maintain print-safe spacing, typography, and page-break behavior.
+- For cross-layer boundaries (derived-state persistence, static config rules), defer to `architecture.mdc`.

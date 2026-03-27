@@ -1,0 +1,25 @@
+---
+description: SAQ architecture boundaries and data-flow rules
+alwaysApply: true
+---
+
+# SAQ Architecture Rules
+
+## Main Layers
+
+- Static questionnaire layer: `src/lib/saq/questionnaire.data.json` + questionnaire repository.
+- Runtime assessment layer: Supabase runtime tables via `assessment.repository.ts`.
+- Engine layer: `src/lib/saq/engine/*` for scoring/results/actions/interpretation.
+- Presentation layer: assessment flow, dashboard, and report/export UI.
+
+## Non-Negotiable Boundaries
+
+- Static questionnaire config is file-based and must not be migrated into runtime DB tables.
+- Derived outputs (scores, summaries, priorities, recommendations) are recomputed in memory and must not be persisted.
+- UI pages/components must call engine modules and repositories; no duplicated scoring/prioritization logic in UI.
+
+## Delegation to Focused Rules
+
+- Engine-specific constraints: see `saq-engine.mdc`
+- Dashboard/report composition constraints: see `ui-dashboard-report.mdc`
+- Persistence/repository constraints: see `supabase-persistence.mdc`
