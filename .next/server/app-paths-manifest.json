@@ -1,7 +1,6 @@
 {
-  "/saq/report/[assessmentId]/page": "app/saq/report/[assessmentId]/page.js",
-  "/saq/assessment/[assessmentId]/page": "app/saq/assessment/[assessmentId]/page.js",
-  "/saq/dashboard/[assessmentId]/page": "app/saq/dashboard/[assessmentId]/page.js",
   "/saq/page": "app/saq/page.js",
-  "/page": "app/page.js"
+  "/saq/assessment/[assessmentId]/page": "app/saq/assessment/[assessmentId]/page.js",
+  "/saq/report/[assessmentId]/page": "app/saq/report/[assessmentId]/page.js",
+  "/saq/dashboard/[assessmentId]/page": "app/saq/dashboard/[assessmentId]/page.js"
 }

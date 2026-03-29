@@ -16,11 +16,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/saq/page.js"
     ],
-    "/saq/report/[assessmentId]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/saq/report/[assessmentId]/page.js"
-    ],
     "/saq/assessment/[assessmentId]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -30,6 +25,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/saq/dashboard/[assessmentId]/page.js"
+    ],
+    "/saq/report/[assessmentId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/saq/report/[assessmentId]/page.js"
     ]
   }
 }

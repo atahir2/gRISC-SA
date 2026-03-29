@@ -11,12 +11,8 @@
  * reporting, and action planning. All functions are pure and side-effect free.
  */
 
-import {
-  getQuestionnaireConfig,
-  Question,
-  ScopeItem,
-  Theme,
-} from "../questionnaire.repository";
+import { getQuestionnaireConfig } from "../questionnaire.repository";
+import type { Question, ScopeItem, Theme } from "../questionnaire.types";
 import {
   CapabilityScore,
   getCapabilityPassStatus,
