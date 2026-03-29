@@ -1,8 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // URL path prefix when the app is served under a subpath (e.g. https://host/grisc-sa/).
-  // Must start with "/" — never use filesystem paths like "~/grisc-sa" (breaks assets → blank page).
-  basePath: process.env.NODE_ENV === "production" ? "/grisc-sa" : "",
+  /**
+   * Subpath hosting (e.g. https://host/grisc-sa/):
+   *
+   * - If your reverse proxy forwards the FULL path to Node (URI still starts with /grisc-sa),
+   *   set at build time: NEXT_PUBLIC_BASE_PATH=/grisc-sa
+   *
+   * - If your proxy STRIPS /grisc-sa and Node only sees /, /saq, … (common) — leave basePath
+   *   empty and configure nginx so /grisc-sa/* is rewritten to /* AND /_next/* is proxied.
+   *   See scripts/nginx-subpath.example.conf
+   */
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
 };
 
 module.exports = nextConfig;
