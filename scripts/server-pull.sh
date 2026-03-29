@@ -18,14 +18,14 @@ git fetch origin
 if git pull --ff-only "origin" "$BRANCH"; then
   echo "==> Pull OK."
 else
-  echo "==> Fast-forward pull failed. If you have no local commits to keep, run:"
+  echo "==> Fast-forward pull failed. If having no local commits to keep, run:"
   echo "    git reset --hard origin/${BRANCH}"
   echo "    Then: npm ci && npm run build"
   exit 1
 fi
 
-echo "==> Dependencies + production build (adjust if you use a different deploy flow)"
+echo "==> Dependencies + production build"
 npm ci
 npm run build
 
-echo "==> Done. Restart your app process (pm2/systemd/docker) if needed."
+echo "==> Done. Restart app process (pm2/systemd/docker) if needed."
