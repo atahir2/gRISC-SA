@@ -1,6 +1,9 @@
 {
-  "/saq/page": "app/saq/page.js",
-  "/saq/assessment/[assessmentId]/page": "app/saq/assessment/[assessmentId]/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/saq/report/[assessmentId]/page": "app/saq/report/[assessmentId]/page.js",
-  "/saq/dashboard/[assessmentId]/page": "app/saq/dashboard/[assessmentId]/page.js"
+  "/saq/page": "app/saq/page.js",
+  "/saq/assessment/page": "app/saq/assessment/page.js",
+  "/page": "app/page.js",
+  "/saq/dashboard/[assessmentId]/page": "app/saq/dashboard/[assessmentId]/page.js",
+  "/saq/assessment/[assessmentId]/page": "app/saq/assessment/[assessmentId]/page.js"
 }
