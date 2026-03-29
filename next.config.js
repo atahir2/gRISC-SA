@@ -15,6 +15,17 @@ const nextConfig = {
       : process.env.NODE_ENV === "production"
         ? "/grisc-sa"
         : "",
+
+  // /grisc-sa/ → /grisc-sa/saq when traffic hits Next (nginx should also redirect bare /grisc-sa).
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/saq",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
