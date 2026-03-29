@@ -1,7 +1,6 @@
 # gRISC Self-Assessment Toolkit
 
-A web-based toolkit for assessing the sustainability maturity of research infrastructures, digital infrastructures, and data centres.
-The system enables structured self-assessment, generates actionable improvement plans, and produces professional reports to support sustainability planning and certification readiness.
+Green Research Infrastructure Sustainable Certification Self Assessment (gRISC-SA) is a web-based toolkit for assessing the sustainability maturity of research infrastructures, digital infrastructures, and data centres for a greener certification readiness profile. The system enables structured self-assessment, generates actionable improvement plans, and produces professional reports to support sustainability planning and certification readiness.
 
 ---
 
