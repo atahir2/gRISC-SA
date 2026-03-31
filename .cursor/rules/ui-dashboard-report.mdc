@@ -15,7 +15,8 @@ Applies to `src/components/saq/`, `src/app/saq/dashboard/`, and `src/app/saq/rep
 
 ## Report and PDF
 
-- The report page is the source of truth for export content.
+- Keep report content hierarchy aligned across web report and PDF output.
+- PDF generation is implemented via `AssessmentReportPDF` (`@react-pdf/renderer`) using the same engine-derived data.
 - Export-specific layout/styling may diverge from browser layout for readability and capture stability.
 - Preserve stakeholder-facing hierarchy: purpose/methodology, interpretation, summaries, action planning.
 - Keep visuals restrained and professional; prioritize scanability over dense UI patterns.

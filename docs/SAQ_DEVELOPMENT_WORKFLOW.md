@@ -25,6 +25,7 @@ Layer definitions live in `docs/SAQ_ARCHITECTURE.md`; this section is intentiona
 
 - Location: `src/components/saq/` and `src/app/saq/*`
 - Includes layout, hierarchy, visual design, dashboard/report composition, PDF readability.
+- PDF generation is implemented in `AssessmentReportPDF` via `@react-pdf/renderer` and should stay aligned with report hierarchy and engine outputs.
 
 ### Persistence and data access
 

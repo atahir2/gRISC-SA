@@ -41,7 +41,7 @@ It helps users assess capability, identify gaps, prioritize improvements, and pr
 - Assessment flow UI: `src/app/saq/assessment/` + `src/components/saq/`
 - Dashboard UI: `src/app/saq/dashboard/`
 - Report/export UI: `src/app/saq/report/`
-- The report page is the source composition for PDF export behavior.
+- The report route computes engine-derived data and uses `AssessmentReportPDF` to generate the PDF output.
 
 ## Core Data Flow
 
@@ -74,4 +74,4 @@ For implementation process and update habits, see `docs/SAQ_DEVELOPMENT_WORKFLOW
 
 - Dashboard and report reuse the same engine outputs for consistency.
 - Report emphasizes print/PDF readability and stakeholder communication.
-- Export pipeline (html2canvas/jsPDF) is a presentation concern; it must not alter engine or persistence logic.
+- Export pipeline uses `@react-pdf/renderer` (`AssessmentReportPDF`) and must not alter engine or persistence logic.

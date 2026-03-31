@@ -72,7 +72,7 @@ It is **not a certification system** itself. It helps organisations prepare for 
 - **React**
 - **Tailwind CSS**
 - **Supabase (PostgreSQL)** — persistence for assessments, scope, answers, action metadata; see `docs/SAQ_SUPABASE_SETUP.md`
-- **PDF export** — `html2canvas` + `jsPDF` from a dedicated report page
+- **PDF export** — `@react-pdf/renderer` via `AssessmentReportPDF` and engine-derived report data
 
 ---
 
@@ -266,17 +266,18 @@ The dashboard reuses the same engine outputs as the multi-step flow; it does **n
 
 The report page:
 
-- Reuses `buildAssessmentResults(...)` and `buildActionPlan(...)` to render a print-friendly summary:
+- Computes engine-derived results and action-plan data (`buildAssessmentResults(...)` and `buildActionPlan(...)`) and passes the composed report payload to `AssessmentReportPDF`.
+- Renders a print-friendly summary:
   - header (organisation, dates)
   - summary metrics
   - per-theme sections
   - action table with priorities and effort
-- Uses `html2canvas` + `jsPDF` to export the rendered report area as a PDF:
-  - purely a **view/export layer** — no changes to engine or persistence.
+- PDF export uses `@react-pdf/renderer` via `AssessmentReportPDF` (not `html2canvas`/`jsPDF`):
+  - purely a **presentation/export layer** — no changes to engine or persistence.
 
 UI helpers for the report:
 
-- `ReportHeader`, `ReportSummaryCard`, `ReportThemeCard`, `ReportSection`, `ReportActionTable`, etc.
+- `MethodologyNote`, `ReadinessLegend`, `ActionPlanSectionIntro`, `ReportActionGroup`, `ReportActionItemCard`, `StrategicRecommendationsCard`, etc.
 
 ---
 
