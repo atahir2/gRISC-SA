@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Session } from "@supabase/supabase-js";
 import { createClient } from "@/src/lib/supabase/client";
-import { createAssessment, listAssessments } from "@/src/lib/saq/assessment.repository";
+import { listAssessments } from "@/src/lib/saq/assessment.repository";
+import { createAssessmentAction } from "@/src/lib/saq/createAssessmentAction";
 import type { Assessment } from "@/src/lib/saq/assessment.types";
 import { WelcomeHero } from "./WelcomeHero";
 import { HowItWorksCard } from "./HowItWorksCard";
@@ -88,8 +89,9 @@ export function SaqLanding() {
     setCreating(true);
     setCreateError(null);
     try {
-      const assessment = await createAssessment(name);
+      const assessment = await createAssessmentAction(name);
       router.push(`/saq/assessment/${assessment.id}`);
+      router.refresh();
     } catch (e) {
       setCreateError(e instanceof Error ? e.message : "Failed to create assessment");
     } finally {
