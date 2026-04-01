@@ -21,7 +21,25 @@ export type ActionMetadata = {
   remarks?: string;
 };
 
-function rowToAssessment(row: { id: string; organisation_name: string; created_at: string; updated_at: string }): Assessment {
+type SupabaseBrowserClient = ReturnType<typeof createClient>;
+
+async function requireSession(supabase: SupabaseBrowserClient) {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+  if (error || !user) {
+    throw new Error("Authentication required");
+  }
+  return user;
+}
+
+function rowToAssessment(row: {
+  id: string;
+  organisation_name: string;
+  created_at: string;
+  updated_at: string;
+}): Assessment {
   return {
     id: row.id,
     organisationName: row.organisation_name,
@@ -66,9 +84,10 @@ function rowToAnswer(assessmentId: string, row: AssessmentAnswerRow): Assessment
 
 export async function createAssessment(organisationName: string): Promise<Assessment> {
   const supabase = createClient();
+  const user = await requireSession(supabase);
   const { data, error } = await supabase
     .from("assessments")
-    .insert({ organisation_name: organisationName })
+    .insert({ organisation_name: organisationName, owner_user_id: user.id })
     .select("id, organisation_name, created_at, updated_at")
     .single();
   if (error) throw new Error(error.message);
@@ -77,6 +96,7 @@ export async function createAssessment(organisationName: string): Promise<Assess
 
 export async function getAssessmentById(assessmentId: string): Promise<Assessment | null> {
   const supabase = createClient();
+  await requireSession(supabase);
   const { data, error } = await supabase
     .from("assessments")
     .select("id, organisation_name, created_at, updated_at")
@@ -88,6 +108,11 @@ export async function getAssessmentById(assessmentId: string): Promise<Assessmen
 
 export async function listAssessments(): Promise<Assessment[]> {
   const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
+
   const { data, error } = await supabase
     .from("assessments")
     .select("id, organisation_name, created_at, updated_at")
@@ -101,6 +126,7 @@ export async function saveScopeSelections(
   scopeSelections: ScopeSelection[]
 ): Promise<void> {
   const supabase = createClient();
+  await requireSession(supabase);
   const rows = scopeSelections.map((s) => scopeToRow(assessmentId, s));
   const { error } = await supabase.from("assessment_scope_selections").upsert(rows, {
     onConflict: "assessment_id,scope_id",
@@ -111,6 +137,7 @@ export async function saveScopeSelections(
 
 export async function loadScopeSelections(assessmentId: string): Promise<ScopeSelection[]> {
   const supabase = createClient();
+  await requireSession(supabase);
   const { data, error } = await supabase
     .from("assessment_scope_selections")
     .select("*")
@@ -124,6 +151,7 @@ export async function saveAnswers(
   answers: AssessmentAnswer[]
 ): Promise<void> {
   const supabase = createClient();
+  await requireSession(supabase);
   const rows = answers.map((a) => answerToRow(assessmentId, a));
   const { error } = await supabase.from("assessment_answers").upsert(rows, {
     onConflict: "assessment_id,question_id",
@@ -134,6 +162,7 @@ export async function saveAnswers(
 
 export async function loadAnswers(assessmentId: string): Promise<AssessmentAnswer[]> {
   const supabase = createClient();
+  await requireSession(supabase);
   const { data, error } = await supabase
     .from("assessment_answers")
     .select("*")
@@ -147,6 +176,7 @@ export async function saveActionMetadata(
   actionMetadataByQuestionId: Record<string, ActionMetadata>
 ): Promise<void> {
   const supabase = createClient();
+  await requireSession(supabase);
   const rows = Object.entries(actionMetadataByQuestionId).map(([question_id, m]) => ({
     assessment_id: assessmentId,
     question_id,
@@ -168,6 +198,7 @@ export async function loadActionMetadata(
   assessmentId: string
 ): Promise<Record<string, ActionMetadata>> {
   const supabase = createClient();
+  await requireSession(supabase);
   const { data, error } = await supabase
     .from("assessment_action_items")
     .select("*")

@@ -1,6 +1,15 @@
+export interface ProfileRow {
+  id: string;
+  full_name: string | null;
+  organisation_name: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface AssessmentRow {
   id: string;
   organisation_name: string;
+  owner_user_id: string;
   created_at: string;
   updated_at: string;
 }
