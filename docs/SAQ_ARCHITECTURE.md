@@ -19,12 +19,15 @@ It helps users assess capability, identify gaps, prioritize improvements, and pr
 ### 2) Runtime assessment layer
 
 - Persisted in Supabase runtime tables:
-  - `assessments`
+  - `profiles` (per auth user)
+  - `assessments` (includes `owner_user_id`)
+  - `assessment_collaborators` (shared access and roles)
   - `assessment_scope_selections`
   - `assessment_answers`
   - `assessment_action_items`
 - IO boundary: `src/lib/saq/assessment.repository.ts`
-- Holds only per-assessment state (scope, answers, and action metadata).
+- Holds per-assessment state (scope, answers, action metadata) and identity/access metadata (ownership, collaborators).
+- **Access rules** live in SQL (RLS) and `src/lib/saq/permissions.ts`; not in the engine.
 
 ### 3) SAQ engine layer
 
@@ -45,11 +48,12 @@ It helps users assess capability, identify gaps, prioritize improvements, and pr
 
 ## Core Data Flow
 
-1. Load questionnaire config from static JSON.
-2. Load runtime assessment data from Supabase via repository.
-3. Compute derived outputs in memory through engine modules.
-4. Render assessment/dashboard/report views from those outputs.
-5. Persist only runtime edits (scope/answers/action metadata), not derived results.
+1. Authenticate (Supabase Auth) where routes require it; middleware protects assessment/dashboard/report routes.
+2. Load questionnaire config from static JSON.
+3. Load runtime assessment data from Supabase via repository (respecting ownership and collaborator access).
+4. Compute derived outputs in memory through engine modules.
+5. Render assessment/dashboard/report views from those outputs.
+6. Persist only runtime edits (scope/answers/action metadata), not derived results.
 
 ## Persistence Model and Boundaries
 
@@ -60,10 +64,14 @@ It helps users assess capability, identify gaps, prioritize improvements, and pr
 
 ## Folder Structure (Practical View)
 
-- `src/lib/saq/` - domain types, repositories, engine
-- `src/lib/supabase/` - Supabase client and generated DB types
+- `src/lib/saq/` - domain types, repositories, engine, `permissions.ts`
+- `src/lib/auth/` - auth helpers (safe redirects, site URL, error formatting)
+- `src/lib/supabase/` - Supabase client and DB types
 - `src/components/saq/` - SAQ feature components
+- `src/components/auth/` - login/signup UI
 - `src/app/saq/` - route entry points (landing, assessment, dashboard, report)
+- `src/app/login/`, `src/app/signup/`, `src/app/auth/` - authentication routes
+- `middleware.ts` - session refresh and route protection for workflow routes
 - `supabase/migrations/` - runtime schema migrations
 - `docs/` - human reference docs
 - `.cursor/rules/` - Cursor-native rule memory

@@ -16,7 +16,7 @@ import { buildAssessmentResults } from "@/src/lib/saq/engine/results";
 import { buildActionPlan, type ExistingActionMetadata } from "@/src/lib/saq/engine/actions";
 import type { EffortRequired } from "@/src/lib/saq/engine/scoring";
 import {
-  getAssessmentById,
+  getAssessmentAccess,
   loadScopeSelections,
   loadAnswers,
   loadActionMetadata,
@@ -25,6 +25,10 @@ import {
   saveActionMetadata,
   type ActionMetadata,
 } from "@/src/lib/saq/assessment.repository";
+import { canEditAssessment, canEditAssessmentVersionContent } from "@/src/lib/saq/permissions";
+import { AssessmentCollaboratorsPanel } from "./AssessmentCollaboratorsPanel";
+import { AssessmentVersionsPanel } from "./AssessmentVersionsPanel";
+import { useAssessmentVersionRoute } from "./useAssessmentVersionRoute";
 
 const STEPS = ["Scope & Goals", "Questionnaire", "Results", "Action Plan"] as const;
 
@@ -36,9 +40,22 @@ interface AssessmentLayoutProps {
 
 export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
   const router = useRouter();
-  const [loading, setLoading] = useState(!!assessmentId);
+  const {
+    versions,
+    versionsLoading,
+    versionError,
+    effectiveVersionId,
+    currentVersion,
+    reloadVersions,
+    navigateToVersion,
+  } = useAssessmentVersionRoute(assessmentId);
+
+  const [dataLoading, setDataLoading] = useState(!!assessmentId);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [assessmentName, setAssessmentName] = useState<string | null>(null);
+  const [myRole, setMyRole] = useState<
+    import("@/src/lib/saq/permissions").AssessmentRole | null
+  >(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -57,27 +74,37 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
   >({});
 
   useEffect(() => {
+    setCurrentStep(0);
+  }, [effectiveVersionId]);
+
+  useEffect(() => {
     if (!assessmentId) {
-      setLoading(false);
+      setDataLoading(false);
+      return;
+    }
+    if (!effectiveVersionId || versionsLoading) {
       return;
     }
     let cancelled = false;
+    setDataLoading(true);
+    setLoadError(null);
     (async () => {
       try {
-        const [assessment, scope, ans, meta] = await Promise.all([
-          getAssessmentById(assessmentId),
-          loadScopeSelections(assessmentId),
-          loadAnswers(assessmentId),
-          loadActionMetadata(assessmentId),
-        ]);
+        const access = await getAssessmentAccess(assessmentId);
         if (cancelled) return;
-        if (!assessment) {
-          setLoadError("Assessment not found.");
-          setLoading(false);
+        if (!access) {
+          setLoadError("Access denied or assessment not found.");
+          setDataLoading(false);
           return;
         }
-        setAssessmentName(assessment.organisationName);
-        // Merge loaded scope with all scope items so we have one entry per scope (full persistence)
+        setMyRole(access.myRole);
+        const [scope, ans, meta] = await Promise.all([
+          loadScopeSelections(assessmentId, effectiveVersionId),
+          loadAnswers(assessmentId, effectiveVersionId),
+          loadActionMetadata(assessmentId, effectiveVersionId),
+        ]);
+        if (cancelled) return;
+        setAssessmentName(access.assessment.organisationName);
         const scopeByScopeId = new Map(scope.map((s) => [s.scopeId, s]));
         const mergedScope = scopeItems.map((si) => {
           const loaded = scopeByScopeId.get(si.id);
@@ -105,40 +132,50 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
           setLoadError(e instanceof Error ? e.message : "Failed to load assessment.");
         }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) setDataLoading(false);
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [assessmentId]);
+  }, [assessmentId, effectiveVersionId, versionsLoading, scopeItems]);
+
+  const canEditRole = myRole !== null && canEditAssessment(myRole);
+  const canEditThisVersion =
+    canEditRole && canEditAssessmentVersionContent(myRole, currentVersion?.status ?? null);
+  const readOnly = assessmentId ? !canEditThisVersion : false;
+
+  const loading =
+    !!assessmentId &&
+    !versionError &&
+    (versionsLoading || dataLoading || !effectiveVersionId);
 
   const persistScope = useCallback(async () => {
-    if (!assessmentId) return;
+    if (!assessmentId || !effectiveVersionId || !canEditThisVersion) return;
     setSaveStatus("saving");
     try {
-      await saveScopeSelections(assessmentId, scopeSelections);
+      await saveScopeSelections(assessmentId, effectiveVersionId, scopeSelections);
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch {
       setSaveStatus("error");
     }
-  }, [assessmentId, scopeSelections]);
+  }, [assessmentId, effectiveVersionId, scopeSelections, canEditThisVersion]);
 
   const persistAnswers = useCallback(async () => {
-    if (!assessmentId) return;
+    if (!assessmentId || !effectiveVersionId || !canEditThisVersion) return;
     setSaveStatus("saving");
     try {
-      await saveAnswers(assessmentId, answers);
+      await saveAnswers(assessmentId, effectiveVersionId, answers);
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch {
       setSaveStatus("error");
     }
-  }, [assessmentId, answers]);
+  }, [assessmentId, effectiveVersionId, answers, canEditThisVersion]);
 
   const persistActionMetadata = useCallback(async () => {
-    if (!assessmentId) return;
+    if (!assessmentId || !effectiveVersionId || !canEditThisVersion) return;
     setSaveStatus("saving");
     try {
       const combined: Record<string, ActionMetadata> = {};
@@ -148,13 +185,13 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
       for (const [qId, m] of Object.entries(actionMetadataByQuestionId)) {
         if (!combined[qId]) combined[qId] = m;
       }
-      await saveActionMetadata(assessmentId, combined);
+      await saveActionMetadata(assessmentId, effectiveVersionId, combined);
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch {
       setSaveStatus("error");
     }
-  }, [assessmentId, effortByQuestionId, actionMetadataByQuestionId]);
+  }, [assessmentId, effectiveVersionId, effortByQuestionId, actionMetadataByQuestionId, canEditThisVersion]);
 
   const assessmentResults = useMemo(
     () => buildAssessmentResults(scopeSelections, answers),
@@ -201,9 +238,9 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
   const goNext = useCallback(() => {
     const next = currentStep + 1;
     if (next >= STEPS.length) {
-      if (assessmentId) {
+      if (assessmentId && effectiveVersionId) {
         persistActionMetadata().then(() =>
-          router.push(`/saq/dashboard/${assessmentId}`)
+          router.push(`/saq/dashboard/${assessmentId}?versionId=${effectiveVersionId}`)
         );
       } else {
         router.push("/saq");
@@ -217,7 +254,7 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
     } else {
       setCurrentStep(next);
     }
-  }, [assessmentId, currentStep, persistScope, persistAnswers, persistActionMetadata, router]);
+  }, [assessmentId, effectiveVersionId, currentStep, persistScope, persistAnswers, persistActionMetadata, router]);
 
   const goBack = useCallback(() => {
     const prev = Math.max(0, currentStep - 1);
@@ -230,6 +267,8 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
     }
   }, [assessmentId, currentStep, persistScope, persistAnswers]);
 
+  const combinedError = versionError || loadError;
+
   if (loading) {
     return (
       <main className="min-h-screen bg-slate-50">
@@ -240,12 +279,19 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
     );
   }
 
-  if (loadError && assessmentId) {
+  if (combinedError && assessmentId) {
     return (
       <main className="min-h-screen bg-slate-50">
         <div className="mx-auto max-w-5xl px-4 py-16">
           <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
-            {loadError}
+            {combinedError.includes("Access denied") ? (
+              <>
+                <strong className="font-semibold">Access denied.</strong> You do not have permission to open this
+                assessment, or it does not exist.
+              </>
+            ) : (
+              combinedError
+            )}
           </div>
           <button
             type="button"
@@ -272,9 +318,34 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
           {assessmentName && (
             <p className="mt-2 text-sm font-medium text-slate-700">
               Assessment: {assessmentName}
+              {myRole && (
+                <span className="ml-2 inline-flex rounded-full bg-slate-200 px-2 py-0.5 text-xs font-medium text-slate-800">
+                  {myRole === "owner"
+                    ? "Owner"
+                    : myRole === "editor"
+                      ? "Editor"
+                      : myRole === "reviewer"
+                        ? "Reviewer"
+                        : "Viewer"}
+                </span>
+              )}
             </p>
           )}
-          {assessmentId && (
+          {readOnly && (
+            <p className="mt-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+              {canEditRole && currentVersion && currentVersion.status !== "draft" ? (
+                <>
+                  This version is <strong>{currentVersion.status}</strong>. Content is read-only; switch to a draft
+                  version or create a new version to edit.
+                </>
+              ) : (
+                <>
+                  You have <strong>view-only</strong> access. Editing is disabled; you can still review results and steps.
+                </>
+              )}
+            </p>
+          )}
+          {assessmentId && canEditThisVersion && (
             <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
               {saveStatus === "saving" && <span>Saving…</span>}
               {saveStatus === "saved" && <span className="text-emerald-600">Saved</span>}
@@ -282,6 +353,20 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
             </div>
           )}
         </header>
+
+        {assessmentId && myRole && effectiveVersionId && (
+          <div className="mb-6">
+            <AssessmentVersionsPanel
+              assessmentId={assessmentId}
+              myRole={myRole}
+              versions={versions}
+              currentVersion={currentVersion}
+              currentVersionId={effectiveVersionId}
+              onVersionsChanged={reloadVersions}
+              onSelectVersion={navigateToVersion}
+            />
+          </div>
+        )}
 
         <div className="mb-6 flex flex-wrap items-center gap-4 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
           <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
@@ -321,6 +406,7 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
                 scopeItems={scopeItems}
                 scopeSelections={scopeSelections}
                 onChange={setScopeSelections}
+                readOnly={readOnly}
               />
             )}
             {currentStep === 1 && (
@@ -331,6 +417,7 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
                 scopeSelections={scopeSelections}
                 answers={answers}
                 onChange={setAnswers}
+                readOnly={readOnly}
               />
             )}
             {currentStep === 2 && (
@@ -339,6 +426,7 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
             {currentStep === 3 && (
               <ActionPlanStep
                 actionPlan={actionPlan}
+                readOnly={readOnly}
                 onEffortChange={(questionId, effort) =>
                   setEffortByQuestionId((prev) => ({
                     ...prev,
@@ -383,6 +471,10 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
             </div>
           </div>
         </div>
+
+        {assessmentId && myRole && (
+          <AssessmentCollaboratorsPanel assessmentId={assessmentId} myRole={myRole} />
+        )}
       </div>
     </main>
   );

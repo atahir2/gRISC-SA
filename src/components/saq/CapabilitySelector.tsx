@@ -7,6 +7,7 @@ interface CapabilitySelectorProps {
   showNotAnswered?: boolean;
   label?: string;
   className?: string;
+  disabled?: boolean;
 }
 
 const LEVELS: { score: CapabilityScore; label: string }[] = [
@@ -21,6 +22,7 @@ export function CapabilitySelector({
   showNotAnswered = true,
   label = "Capability level",
   className = "",
+  disabled = false,
 }: CapabilitySelectorProps) {
   return (
     <div className={className}>
@@ -34,11 +36,14 @@ export function CapabilitySelector({
             <button
               key={score}
               type="button"
-              onClick={() => onChange(score)}
+              disabled={disabled}
+              onClick={() => !disabled && onChange(score)}
               className={`inline-flex min-w-[2.5rem] items-center justify-center rounded-lg border px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 ${
-                isSelected
-                  ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-1 ring-emerald-600"
-                  : "border-slate-300 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50"
+                disabled
+                  ? "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-500"
+                  : isSelected
+                    ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-1 ring-emerald-600"
+                    : "border-slate-300 bg-white text-slate-700 hover:border-slate-400 hover:bg-slate-50"
               }`}
             >
               {l}

@@ -46,6 +46,30 @@ export function SaqLanding() {
     return () => subscription.unsubscribe();
   }, []);
 
+  /** Email confirmation / OAuth: Supabase redirects here with ?code= (PKCE). Exchange on the client. */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    if (!code) return;
+
+    const supabase = createClient();
+    let cancelled = false;
+    void (async () => {
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      if (cancelled) return;
+      if (error) {
+        router.replace(`/login?error=${encodeURIComponent(error.message)}`);
+        return;
+      }
+      router.replace("/saq");
+      router.refresh();
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
+
   useEffect(() => {
     if (!authReady) return;
     if (!session) {

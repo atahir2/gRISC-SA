@@ -19,6 +19,7 @@ interface QuestionnaireStepProps {
   scopeSelections: ScopeSelection[];
   answers: AssessmentAnswer[];
   onChange: (answers: AssessmentAnswer[]) => void;
+  readOnly?: boolean;
 }
 
 export function QuestionnaireStep({
@@ -28,6 +29,7 @@ export function QuestionnaireStep({
   scopeSelections,
   answers,
   onChange,
+  readOnly = false,
 }: QuestionnaireStepProps) {
   const inScopeScopeIds = new Set(
     scopeSelections.filter((s) => s.inScope).map((s) => s.scopeId)
@@ -49,6 +51,7 @@ export function QuestionnaireStep({
     answers.find((a) => a.questionId === questionId);
 
   const upsertAnswer = (questionId: string, score: CapabilityScore) => {
+    if (readOnly) return;
     const existing = getAnswer(questionId);
     const base: AssessmentAnswer =
       existing ?? {
@@ -99,6 +102,11 @@ export function QuestionnaireStep({
 
   return (
     <div className="space-y-8">
+      {readOnly && (
+        <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          You have <strong>view-only</strong> access. Answers are shown for review but cannot be changed.
+        </div>
+      )}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <SectionHeader
           title="Questionnaire"
@@ -195,6 +203,7 @@ export function QuestionnaireStep({
                                       upsertAnswer(q.id, score)
                                     }
                                     showNotAnswered={true}
+                                    disabled={readOnly}
                                   />
                                 </div>
                               </div>

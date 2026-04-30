@@ -7,6 +7,7 @@ This guide explains how to extend the SAQ safely while preserving architectural 
 1. Clarify whether the change is:
    - business logic (engine),
    - persistence/repository,
+   - access control / auth / collaboration (`permissions.ts`, RLS, middleware),
    - or UI/report/export.
 2. Implement in the correct layer first; avoid cross-layer shortcuts.
 3. Reuse existing engine/repository APIs before adding new ones.
@@ -30,7 +31,14 @@ Layer definitions live in `docs/SAQ_ARCHITECTURE.md`; this section is intentiona
 ### Persistence and data access
 
 - Location: `src/lib/saq/assessment.repository.ts`, `src/lib/supabase/`, `supabase/migrations/`
-- Includes table writes/reads, row mapping, schema evolution.
+- Includes table writes/reads, row mapping, schema evolution, RLS policies, and RPCs for listing assessments or collaborators where needed.
+
+### Access control (auth and collaboration)
+
+- **Not engine logic:** keep `src/lib/saq/engine/*` free of Supabase and auth.
+- **Roles and capabilities:** extend `src/lib/saq/permissions.ts` and enforce in `assessment.repository.ts` + RLS.
+- **UI:** use permission helpers and repository APIs; avoid scattering role string checks across components.
+- **Routes:** `middleware.ts` for protected SAQ workflow paths; `src/app/auth/callback` for OAuth/email confirmation code exchange when applicable.
 
 ## Common Mistakes to Avoid
 
@@ -38,6 +46,7 @@ Layer definitions live in `docs/SAQ_ARCHITECTURE.md`; this section is intentiona
 - Storing derived metrics/results in runtime tables.
 - Moving static questionnaire content into Supabase.
 - Mixing Supabase row types directly into UI contracts.
+- Duplicating collaborator or role rules outside `permissions.ts` and the repository.
 - Making report/export changes that alter business logic outputs.
 
 ## Updating Memory and Docs After Milestones

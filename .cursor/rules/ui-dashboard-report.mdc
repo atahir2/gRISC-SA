@@ -12,6 +12,7 @@ Applies to `src/components/saq/`, `src/app/saq/dashboard/`, and `src/app/saq/rep
 
 - Keep dashboard hierarchy clear: at-a-glance metrics, capability/priority summaries, theme and action distribution.
 - Use engine outputs as source data.
+- Users without edit access should see read-only UX where applicable; defer access rules to `permissions.ts` + repository (not new scoring logic here).
 
 ## Report and PDF
 

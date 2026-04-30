@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/src/lib/supabase/client";
+import { formatAuthErrorMessage } from "@/src/lib/auth/auth-errors";
+import { getPublicSiteUrl } from "@/src/lib/auth/site-url";
 
 export function SignupForm() {
   const router = useRouter();
@@ -39,17 +41,21 @@ export function SignupForm() {
     setLoading(true);
     try {
       const supabase = createClient();
+      const siteUrl = getPublicSiteUrl();
+      // Land on /saq (with basePath → /grisc-sa/saq), not /auth/callback — avoids extra route and proxy 404s.
+      const emailRedirectTo = siteUrl ? `${siteUrl}/saq` : undefined;
       const { data, error: signUpError } = await supabase.auth.signUp({
         email: email.trim(),
         password,
         options: {
+          emailRedirectTo,
           data: {
             full_name: fullName.trim() || undefined,
           },
         },
       });
       if (signUpError) {
-        setError(signUpError.message);
+        setError(formatAuthErrorMessage(signUpError.message));
         return;
       }
       if (data.session) {

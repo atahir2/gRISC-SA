@@ -7,11 +7,14 @@ import { buildAssessmentResults } from "@/src/lib/saq/engine/results";
 import { buildActionPlan, type ExistingActionMetadata } from "@/src/lib/saq/engine/actions";
 import { buildAssessmentInterpretation } from "@/src/lib/saq/engine/interpretation";
 import {
-  getAssessmentById,
+  getAssessmentAccess,
   loadScopeSelections,
   loadAnswers,
   loadActionMetadata,
 } from "@/src/lib/saq/assessment.repository";
+import type { AssessmentRole } from "@/src/lib/saq/permissions";
+import { AssessmentVersionsPanel } from "./AssessmentVersionsPanel";
+import { useAssessmentVersionRoute } from "./useAssessmentVersionRoute";
 import type { ScopeSelection, AssessmentAnswer } from "@/src/lib/saq/engine/results";
 import type { EffortRequired } from "@/src/lib/saq/engine/scoring";
 import { DashboardSummaryCard } from "./DashboardSummaryCard";
@@ -30,9 +33,20 @@ interface AssessmentDashboardProps {
 }
 
 export function AssessmentDashboard({ assessmentId }: AssessmentDashboardProps) {
-  const [loading, setLoading] = useState(true);
+  const {
+    versions,
+    versionsLoading,
+    versionError,
+    effectiveVersionId,
+    currentVersion,
+    reloadVersions,
+    navigateToVersion,
+  } = useAssessmentVersionRoute(assessmentId);
+
+  const [dataLoading, setDataLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [assessmentName, setAssessmentName] = useState<string | null>(null);
+  const [myRole, setMyRole] = useState<AssessmentRole | null>(null);
   const [createdAt, setCreatedAt] = useState<Date | null>(null);
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
   const [scopeSelections, setScopeSelections] = useState<ScopeSelection[]>([]);
@@ -47,19 +61,22 @@ export function AssessmentDashboard({ assessmentId }: AssessmentDashboardProps) 
   const { scopeItems } = useMemo(() => getQuestionnaireConfig(), []);
 
   const loadData = useCallback(async () => {
-    setLoading(true);
+    if (!effectiveVersionId || versionsLoading) return;
+    setDataLoading(true);
     setError(null);
     try {
-      const [assessment, scope, ans, meta] = await Promise.all([
-        getAssessmentById(assessmentId),
-        loadScopeSelections(assessmentId),
-        loadAnswers(assessmentId),
-        loadActionMetadata(assessmentId),
-      ]);
-      if (!assessment) {
+      const access = await getAssessmentAccess(assessmentId);
+      if (!access) {
         setError("Assessment not found.");
         return;
       }
+      setMyRole(access.myRole);
+      const assessment = access.assessment;
+      const [scope, ans, meta] = await Promise.all([
+        loadScopeSelections(assessmentId, effectiveVersionId),
+        loadAnswers(assessmentId, effectiveVersionId),
+        loadActionMetadata(assessmentId, effectiveVersionId),
+      ]);
       setAssessmentName(assessment.organisationName);
       setCreatedAt(assessment.createdAt instanceof Date ? assessment.createdAt : new Date(assessment.createdAt));
       setUpdatedAt(assessment.updatedAt instanceof Date ? assessment.updatedAt : new Date(assessment.updatedAt as string));
@@ -93,13 +110,19 @@ export function AssessmentDashboard({ assessmentId }: AssessmentDashboardProps) 
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load assessment.");
     } finally {
-      setLoading(false);
+      setDataLoading(false);
     }
-  }, [assessmentId, scopeItems]);
+  }, [assessmentId, scopeItems, effectiveVersionId, versionsLoading]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const combinedError = versionError || error;
+  const loading =
+    versionsLoading ||
+    dataLoading ||
+    (!!assessmentId && !effectiveVersionId && !versionError);
 
   const assessmentResults = useMemo(
     () => buildAssessmentResults(scopeSelections, answers),
@@ -137,13 +160,13 @@ export function AssessmentDashboard({ assessmentId }: AssessmentDashboardProps) 
     );
   }
 
-  if (error) {
+  if (combinedError) {
     return (
       <main className="min-h-screen bg-slate-50">
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
           <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-800">
             <p className="font-medium">Could not load assessment</p>
-            <p className="mt-1 text-sm">{error}</p>
+            <p className="mt-1 text-sm">{combinedError}</p>
             <Link
               href="/saq"
               className="mt-4 inline-flex items-center rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 shadow-sm hover:bg-red-50"
@@ -192,6 +215,11 @@ export function AssessmentDashboard({ assessmentId }: AssessmentDashboardProps) 
               <dl className="mt-3 flex flex-wrap gap-x-4 gap-y-0 text-xs text-slate-500">
                 <span>Created {createdAt ? formatDate(createdAt) : "—"}</span>
                 <span>Updated {updatedAt ? formatDate(updatedAt) : "—"}</span>
+                {currentVersion && (
+                  <span>
+                    Version v{currentVersion.versionNumber} ({currentVersion.status})
+                  </span>
+                )}
               </dl>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:items-end">
@@ -200,19 +228,31 @@ export function AssessmentDashboard({ assessmentId }: AssessmentDashboardProps) 
               </span>
               <div className="flex flex-wrap gap-2">
                 <Link
-                  href={`/saq/assessment/${assessmentId}`}
+                  href={
+                    effectiveVersionId
+                      ? `/saq/assessment/${assessmentId}?versionId=${effectiveVersionId}`
+                      : `/saq/assessment/${assessmentId}`
+                  }
                   className="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   Resume assessment
                 </Link>
                 <Link
-                  href={`/saq/report/${assessmentId}`}
+                  href={
+                    effectiveVersionId
+                      ? `/saq/report/${assessmentId}?versionId=${effectiveVersionId}`
+                      : `/saq/report/${assessmentId}`
+                  }
                   className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   View report
                 </Link>
                 <Link
-                  href={`/saq/report/${assessmentId}`}
+                  href={
+                    effectiveVersionId
+                      ? `/saq/report/${assessmentId}?versionId=${effectiveVersionId}`
+                      : `/saq/report/${assessmentId}`
+                  }
                   className="inline-flex items-center rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-600 shadow-sm hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 >
                   Export PDF
@@ -221,6 +261,20 @@ export function AssessmentDashboard({ assessmentId }: AssessmentDashboardProps) 
             </div>
           </div>
         </header>
+
+        {myRole && effectiveVersionId && (
+          <div className="mb-6">
+            <AssessmentVersionsPanel
+              assessmentId={assessmentId}
+              myRole={myRole}
+              versions={versions}
+              currentVersion={currentVersion}
+              currentVersionId={effectiveVersionId}
+              onVersionsChanged={reloadVersions}
+              onSelectVersion={navigateToVersion}
+            />
+          </div>
+        )}
 
         {/* Contextual note */}
         <div className="mb-4">

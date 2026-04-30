@@ -5,17 +5,29 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/src/lib/supabase/client";
 import { safeNextPath } from "@/src/lib/auth/safe-redirect";
+import { formatAuthErrorMessage } from "@/src/lib/auth/auth-errors";
 
 interface LoginFormProps {
   nextPath?: string;
+  /** Set when redirecting from /auth/callback with a failed auth exchange */
+  initialAuthError?: string;
 }
 
-export function LoginForm({ nextPath }: LoginFormProps) {
+export function LoginForm({ nextPath, initialAuthError }: LoginFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!initialAuthError) return;
+    try {
+      setError(formatAuthErrorMessage(decodeURIComponent(initialAuthError)));
+    } catch {
+      setError(formatAuthErrorMessage(initialAuthError));
+    }
+  }, [initialAuthError]);
 
   useEffect(() => {
     const supabase = createClient();
@@ -37,7 +49,7 @@ export function LoginForm({ nextPath }: LoginFormProps) {
         password,
       });
       if (signInError) {
-        setError(signInError.message);
+        setError(formatAuthErrorMessage(signInError.message));
         return;
       }
       router.push(safeNextPath(nextPath));

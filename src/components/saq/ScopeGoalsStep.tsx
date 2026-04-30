@@ -11,6 +11,7 @@ interface ScopeGoalsStepProps {
   scopeItems: ScopeItem[];
   scopeSelections: ScopeSelection[];
   onChange: (selections: ScopeSelection[]) => void;
+  readOnly?: boolean;
 }
 
 export function ScopeGoalsStep({
@@ -18,11 +19,13 @@ export function ScopeGoalsStep({
   scopeItems,
   scopeSelections,
   onChange,
+  readOnly = false,
 }: ScopeGoalsStepProps) {
   const upsertSelection = (
     scopeId: string,
     patch: Partial<ScopeSelection>
   ) => {
+    if (readOnly) return;
     const existing = scopeSelections.find((s) => s.scopeId === scopeId);
     const base: ScopeSelection =
       existing ?? {
@@ -40,6 +43,11 @@ export function ScopeGoalsStep({
 
   return (
     <div className="space-y-8">
+      {readOnly && (
+        <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+          You have <strong>view-only</strong> access to this assessment. You can review scope and goals but cannot change them.
+        </div>
+      )}
       <SectionHeader
         title="Scope & Goals"
         subtitle="Define which topic areas are in scope for this assessment and set optional target capability levels (1–3) for each."
@@ -90,10 +98,11 @@ export function ScopeGoalsStep({
                           </div>
                         </div>
                         <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
-                          <label className="inline-flex cursor-pointer items-center gap-2">
+                          <label className={`inline-flex items-center gap-2 ${readOnly ? "cursor-default opacity-80" : "cursor-pointer"}`}>
                             <input
                               type="checkbox"
-                              className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                              disabled={readOnly}
+                              className="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 disabled:cursor-not-allowed"
                               checked={inScope}
                               onChange={(e) =>
                                 upsertSelection(scope.id, {
@@ -113,6 +122,7 @@ export function ScopeGoalsStep({
                               <button
                                 key={level}
                                 type="button"
+                                disabled={readOnly}
                                 onClick={() =>
                                   upsertSelection(scope.id, {
                                     targetCapability:
@@ -120,9 +130,11 @@ export function ScopeGoalsStep({
                                   })
                                 }
                                 className={`inline-flex h-8 min-w-[2rem] items-center justify-center rounded-lg border px-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 ${
-                                  target === level
-                                    ? "border-emerald-600 bg-emerald-50 text-emerald-800"
-                                    : "border-slate-300 bg-white text-slate-600 hover:border-slate-400 hover:bg-slate-50"
+                                  readOnly
+                                    ? "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-500"
+                                    : target === level
+                                      ? "border-emerald-600 bg-emerald-50 text-emerald-800"
+                                      : "border-slate-300 bg-white text-slate-600 hover:border-slate-400 hover:bg-slate-50"
                                 }`}
                               >
                                 {level}

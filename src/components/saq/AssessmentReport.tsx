@@ -7,11 +7,14 @@ import { buildAssessmentResults } from "@/src/lib/saq/engine/results";
 import { buildActionPlan, type ExistingActionMetadata } from "@/src/lib/saq/engine/actions";
 import { buildAssessmentInterpretation } from "@/src/lib/saq/engine/interpretation";
 import {
-  getAssessmentById,
+  getAssessmentAccess,
   loadScopeSelections,
   loadAnswers,
   loadActionMetadata,
 } from "@/src/lib/saq/assessment.repository";
+import type { AssessmentRole } from "@/src/lib/saq/permissions";
+import { AssessmentVersionsPanel } from "./AssessmentVersionsPanel";
+import { useAssessmentVersionRoute } from "./useAssessmentVersionRoute";
 import type { ScopeSelection, AssessmentAnswer } from "@/src/lib/saq/engine/results";
 import type { EffortRequired } from "@/src/lib/saq/engine/scoring";
 import { ReportHeader } from "./ReportHeader";
@@ -35,8 +38,19 @@ interface AssessmentReportProps {
 
 export function AssessmentReport({ assessmentId }: AssessmentReportProps) {
   const reportRef = useRef<HTMLDivElement>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    versions,
+    versionsLoading,
+    versionError,
+    effectiveVersionId,
+    currentVersion,
+    reloadVersions,
+    navigateToVersion,
+  } = useAssessmentVersionRoute(assessmentId);
+
+  const [dataLoading, setDataLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [myRole, setMyRole] = useState<AssessmentRole | null>(null);
   const [exporting, setExporting] = useState(false);
   const [isExportMode, setIsExportMode] = useState(false);
   const [assessmentName, setAssessmentName] = useState<string | null>(null);
@@ -55,19 +69,22 @@ export function AssessmentReport({ assessmentId }: AssessmentReportProps) {
   const { scopeItems, themes } = questionnaire;
 
   const loadData = useCallback(async () => {
-    setLoading(true);
+    if (!effectiveVersionId || versionsLoading) return;
+    setDataLoading(true);
     setError(null);
     try {
-      const [assessment, scope, ans, meta] = await Promise.all([
-        getAssessmentById(assessmentId),
-        loadScopeSelections(assessmentId),
-        loadAnswers(assessmentId),
-        loadActionMetadata(assessmentId),
-      ]);
-      if (!assessment) {
+      const access = await getAssessmentAccess(assessmentId);
+      if (!access) {
         setError("Assessment not found.");
         return;
       }
+      setMyRole(access.myRole);
+      const assessment = access.assessment;
+      const [scope, ans, meta] = await Promise.all([
+        loadScopeSelections(assessmentId, effectiveVersionId),
+        loadAnswers(assessmentId, effectiveVersionId),
+        loadActionMetadata(assessmentId, effectiveVersionId),
+      ]);
       setAssessmentName(assessment.organisationName);
       setCreatedAt(
         assessment.createdAt instanceof Date
@@ -111,13 +128,19 @@ export function AssessmentReport({ assessmentId }: AssessmentReportProps) {
         e instanceof Error ? e.message : "Failed to load assessment."
       );
     } finally {
-      setLoading(false);
+      setDataLoading(false);
     }
-  }, [assessmentId, scopeItems]);
+  }, [assessmentId, scopeItems, effectiveVersionId, versionsLoading]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const combinedError = versionError || error;
+  const loading =
+    versionsLoading ||
+    dataLoading ||
+    (!!assessmentId && !effectiveVersionId && !versionError);
 
   const assessmentResults = useMemo(
     () => buildAssessmentResults(scopeSelections, answers),
@@ -237,12 +260,12 @@ export function AssessmentReport({ assessmentId }: AssessmentReportProps) {
     );
   }
 
-  if (error) {
+  if (combinedError) {
     return (
       <main className="min-h-screen bg-slate-50">
         <div className="mx-auto max-w-2xl px-4 py-16">
           <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
-            {error}
+            {combinedError}
           </div>
           <Link
             href="/saq"
@@ -261,13 +284,21 @@ export function AssessmentReport({ assessmentId }: AssessmentReportProps) {
         {/* Screen-only actions */}
         <div className="mb-6 flex flex-wrap items-center gap-2 print:hidden">
           <Link
-            href={`/saq/assessment/${assessmentId}`}
+            href={
+              effectiveVersionId
+                ? `/saq/assessment/${assessmentId}?versionId=${effectiveVersionId}`
+                : `/saq/assessment/${assessmentId}`
+            }
             className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
           >
             Resume assessment
           </Link>
           <Link
-            href={`/saq/dashboard/${assessmentId}`}
+            href={
+              effectiveVersionId
+                ? `/saq/dashboard/${assessmentId}?versionId=${effectiveVersionId}`
+                : `/saq/dashboard/${assessmentId}`
+            }
             className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
           >
             View dashboard
@@ -287,6 +318,20 @@ export function AssessmentReport({ assessmentId }: AssessmentReportProps) {
             Back to SAQ
           </Link>
         </div>
+
+        {myRole && effectiveVersionId && (
+          <div className="mb-6 print:hidden">
+            <AssessmentVersionsPanel
+              assessmentId={assessmentId}
+              myRole={myRole}
+              versions={versions}
+              currentVersion={currentVersion}
+              currentVersionId={effectiveVersionId}
+              onVersionsChanged={reloadVersions}
+              onSelectVersion={navigateToVersion}
+            />
+          </div>
+        )}
 
         {/* Report content (captured for PDF). In export mode, header is omitted so page 2 starts with report body. */}
         <div
