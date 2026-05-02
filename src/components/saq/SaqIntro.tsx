@@ -131,6 +131,7 @@ export function SaqIntro() {
                   width={200}
                   height={48}
                   className="h-10 w-auto"
+                  unoptimized
                 />
                 <Image
                   src="/acknowledgements/greendigit.png"
@@ -138,6 +139,7 @@ export function SaqIntro() {
                   width={160}
                   height={40}
                   className="h-8 w-auto"
+                  unoptimized
                 />
               </div>
             </div>

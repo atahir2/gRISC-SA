@@ -141,3 +141,13 @@ In your env file:
 
 - The **Dockerfile** does not bake `.env*` files; Compose **`env_file`** injects runtime config.
 - **`NEXT_PUBLIC_BASE_PATH`** is a **build** argument from the env file used at build time. Rebuild after changing it: `docker compose ... build --no-cache app`.
+
+## Domain deployment (outside localhost)
+
+Symptoms fixed in-repo: **middleware no longer depends on Supabase** for Postgres-only stacks; **`basePath`** no longer silently defaults to `/grisc-sa` in production (root deploy matches Docker unless you explicitly set `/grisc-sa` at build).
+
+1. **`NEXTAUTH_URL`** must equal the browser URL prefix users use (`https://your.host` at root, or `https://your.host/grisc-sa` under a subpath). Wrong values cause login/API errors.
+
+2. **Rebuild** whenever `NEXT_PUBLIC_BASE_PATH` changes. Root: leave empty / unset before `next build`. Subpath: set `NEXT_PUBLIC_BASE_PATH=/grisc-sa` (see `scripts/nginx-subpath.example.conf`).
+
+3. **Reverse proxy** must pass through **`/_next/static`**, **`/_next/data`**, and other `/_next/*` routes to Node (or static files will 404 and “only the home page works”). Public assets (e.g. acknowledgement logos) use normal paths under the app’s base path; examples: `scripts/nginx-root.example.conf`, `scripts/nginx-subpath.example.conf`.

@@ -9,8 +9,8 @@ alwaysApply: false
 ## Authentication
 
 - **Primary app auth:** **NextAuth** (credentials) with PostgreSQL-backed users via Drizzle adapter (`src/lib/auth/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`). Client surfaces **`SessionProvider`** and **`useSession`** (e.g. **`SaqAuthenticatedHeader`**: Login / Sign up when logged out; signed-in label + Logout; post-logout redirect configurable via env).
-- **Legacy / transitional:** Supabase client + **`middleware.ts`** may still consult Supabase session helpers for route protection—keep behavior aligned when changing auth so assessment/dashboard/report gates stay consistent.
-- **Public:** `/saq` intro (**`SaqIntro`**). **Protected by middleware:** `/saq/assessment/*`, `/saq/dashboard/*`, `/saq/report/*` → redirect to `/login?next=…` when unauthenticated.
+- **`middleware.ts`:** gate **assessment / dashboard / report** with **`next-auth/jwt`** `getToken` (no Supabase requirement). If `NEXT_PUBLIC_SUPABASE_*` are set, Supabase middleware refreshes auth cookies but does not replace the NextAuth gate.
+- **Public:** `/saq` intro (**`SaqIntro`**), `/login`, `/signup`, `/saq/manage` etc. are **not** behind middleware; **`/saq/assessment/*`**, **`/saq/dashboard/*`**, **`/saq/report/*`** → redirect to Login with `next=…` when there is no JWT.
 - **OAuth / legacy email code exchange:** `/auth/callback` may still exchange `?code=` via Supabase where that path is enabled; credentials sign-up/sign-in flows use NextAuth forms.
 
 ## Persistence (auth-related tables)
