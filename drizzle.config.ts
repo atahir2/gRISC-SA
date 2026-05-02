@@ -4,6 +4,7 @@ import { defineConfig } from "drizzle-kit";
 // Prefer local developer env file, then fallback to standard .env.
 loadEnv({ path: ".env.local" });
 loadEnv({ path: ".env.docker" });
+loadEnv({ path: ".env.production" });
 loadEnv();
 
 if (!process.env.DATABASE_URL) {

@@ -13,7 +13,8 @@
     "db:studio": "drizzle-kit studio",
     "docker:up": "docker compose --env-file .env.docker up --build -d",
     "docker:down": "docker compose --env-file .env.docker down",
-    "docker:migrate": "docker compose --profile migrate --env-file .env.docker run --rm db-migrate",
+    "docker:migrate": "docker compose --profile migrate --env-file .env.docker run --rm migrate",
+    "docker:migrate:prod": "docker compose --profile migrate --env-file .env.production run --rm migrate",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

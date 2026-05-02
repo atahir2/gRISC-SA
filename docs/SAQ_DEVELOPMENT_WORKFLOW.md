@@ -31,7 +31,7 @@ Layer definitions live in `docs/SAQ_ARCHITECTURE.md`; this section is intentiona
 ### Persistence and data access
 
 - **Facade:** `src/lib/saq/assessment.repository.ts` (implementation chosen by `SAQ_DATABASE_PROVIDER`).
-- **PostgreSQL (primary):** `src/lib/db/drizzle.ts`, `drizzle/schema.ts`, `drizzle/migrations/` — run migrations with `npm run db:migrate`; local/prod patterns in `docs/DOCKER.md`.
+- **PostgreSQL (primary):** `src/lib/db/drizzle.ts`, `drizzle/schema.ts`, `drizzle/migrations/` — apply migrations with `npm run db:migrate` (host) or Compose service **`migrate`** (`drizzle-kit` is dev-only; the production **`app`** Docker image does not include it — see `docs/DOCKER.md`).
 - **Supabase (legacy):** `src/lib/supabase/`, `supabase/migrations/` — RLS and client path when `SAQ_DATABASE_PROVIDER=supabase`; see `docs/SAQ_SUPABASE_SETUP.md`.
 - Includes table writes/reads, row mapping, schema evolution, RLS (Supabase path), and listing/collaborator access as implemented per provider.
 

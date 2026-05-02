@@ -58,7 +58,7 @@ The tool supports internal decision-making as well as preparation for sustainabi
 * **Styling:** Tailwind CSS
 * **Backend / DB:** PostgreSQL (Drizzle ORM; optional Supabase path where still wired)
 * **Data Model:** JSON-based questionnaire + relational persistence
-* **Export:** HTML-based PDF rendering
+* **Export:** PDF via `@react-pdf/renderer` (engine-derived data)
 
 ---
 
@@ -93,8 +93,7 @@ Located in `src/lib/saq/engine/`
 
 ### 5. Report & Export Layer
 
-* Report page acts as source of truth
-* PDF generated from rendered HTML (preserving layout and styling)
+* Report page composes engine outputs; PDF is generated with `@react-pdf/renderer` (`AssessmentReportPDF`)
 
 ---
 
@@ -161,18 +160,22 @@ http://localhost:3000
 
 ## Docker (full stack)
 
-Run **Next.js + PostgreSQL + Adminer** with one Compose file:
+The **`app` image is production-only** — it does **not** include `drizzle-kit`. Apply schema changes with the Compose **`migrate`** service (or `npm run db:migrate` on the host), **never** by exec’ing into `saq-app`. Details: **[docs/DOCKER.md](docs/DOCKER.md)**.
 
-1. Copy `.env.docker.example` → `.env.docker` and set secrets (see template).
-2. Start: `docker compose --env-file .env.docker up --build -d` (or `npm run docker:up`).
-3. Apply migrations once:  
-   `docker compose --profile migrate --env-file .env.docker run --rm db-migrate` (or `npm run docker:migrate`).
-4. App: [http://localhost:3000](http://localhost:3000) · Adminer: [http://localhost:8080](http://localhost:8080).
+**Typical first-time / production-style sequence** (use `.env.production` or your env file; ensure `DATABASE_URL` uses host **`postgres`** inside Compose):
+
+```bash
+docker compose --env-file .env.production up -d postgres
+docker compose --profile migrate --env-file .env.production run --rm migrate
+docker compose --env-file .env.production up -d --build app
+```
+
+**Local dev** (`.env.docker`): `npm run docker:up`, then `npm run docker:migrate` once. App: [http://localhost:3000](http://localhost:3000) · Adminer: [http://localhost:8080](http://localhost:8080).
 
 Stopping: `docker compose --env-file .env.docker down` (`npm run docker:down`).  
 **Never use `down -v` unless you intend to wipe the database volume.**
 
-Full step-by-step, verification, and port overrides: **[docs/DOCKER.md](docs/DOCKER.md)**.
+Copy `.env.docker.example` → `.env.docker`, or `.env.production.example` → `.env.production` (see `COMPOSE_ENV_FILE_PATH` in the example).
 
 ---
 
@@ -184,7 +187,7 @@ Full step-by-step, verification, and port overrides: **[docs/DOCKER.md](docs/DOC
 
 Compose helpers:
 
-- `npm run docker:up` / `docker:down` / `docker:migrate`
+- `npm run docker:up` / `docker:down` / `docker:migrate` (`.env.docker`) / `docker:migrate:prod` (`.env.production`)
 
 ---
 

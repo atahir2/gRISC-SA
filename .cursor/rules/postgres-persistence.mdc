@@ -21,4 +21,4 @@ Runtime SAQ data uses **`DATABASE_URL`** and **`src/lib/db/drizzle.ts`** (connec
 
 ## Operations
 
-- Local/CI database: see **`docs/DOCKER.md`** for Compose (Postgres + app + optional Adminer) and migration one-shots.
+- Local/CI database: see **`docs/DOCKER.md`** — run **`docker compose --profile migrate run --rm migrate`** (or host `npm run db:migrate`). **Do not** run migrations inside the production **`app`** container; it has no `drizzle-kit`.
