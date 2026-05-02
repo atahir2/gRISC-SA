@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { formatAuthErrorMessage } from "@/src/lib/auth/auth-errors";
-import { withBasePath } from "@/src/lib/base-path";
+import { appFetch } from "@/src/lib/base-path";
 
 export function SignupForm() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export function SignupForm() {
     }
     setLoading(true);
     try {
-      const registerRes = await fetch(withBasePath("/api/auth/register"), {
+      const registerRes = await appFetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

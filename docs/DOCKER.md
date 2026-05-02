@@ -146,10 +146,10 @@ In your env file:
 
 Symptoms fixed in-repo: **middleware no longer depends on Supabase** for Postgres-only stacks; **`basePath`** no longer silently defaults to `/grisc-sa` in production (root deploy matches Docker unless you explicitly set `/grisc-sa` at build).
 
-1. **`NEXTAUTH_URL`** must equal the **canonical URL users open in the browser**, including **`basePath`** — e.g. `https://mc-a4.lab.uvalight.net/grissa`. Using only `https://host` while the app lives under **`/grissa`** breaks `/api/auth/*` from the browser. Wrong schemes (`http` vs `https`) have the same effect.
+1. **`NEXTAUTH_URL`** (server env): use the **canonical site URL including `basePath`**, e.g. `https://mc-a4.lab.uvalight.net/grissa`, for server-side auth and redirects. Wrong host or `http` vs `https` breaks sessions.
 
 2. **Rebuild** whenever `NEXT_PUBLIC_BASE_PATH` changes. Root: unset or empty. Subpath examples: **`/grissa`**, **`/grisc-sa`** (see `scripts/nginx-subpath.example.conf`; proxy must forward the full path unchanged).
 
 3. **Reverse proxy** must pass **`/_next/static`**, **`/_next/data`**, and other **`/_next/*`** to Node (or JS routes break). **`public`** files resolve as **`{basePath}/your-file`** — e.g. logos at **`/grissa/acknowledgements/…`**. **`unoptimized`** `next/image` can emit **`/acknowledgements/…`** without the prefix unless you pass URLs from **`assetUrl()`** (`src/lib/base-path.ts`).
 
-4. **Client `fetch("/api/…")` does not add `basePath`.** Use **`withBasePath("/api/…")`** from `src/lib/base-path.ts` (used for signup and the SAQ repository API client). Omitting this causes **404** on `/api/auth/register` and **`/api/saq/repository`** while pages under `/grissa/...` still load from HTML.
+4. **Same-origin API calls:** use **`appFetch()`** / **`withBasePath()`** from `src/lib/base-path.ts` instead of raw **`fetch("/api/…")`**. **`AuthSessionProvider`** sets **`SessionProvider basePath={withBasePath("/api/auth")}`** so NextAuth client (`signIn`, `useSession`, CSRF) calls **`{basePath}/api/auth/*`** (NextAuth’s default client URL logic does not know Next.js `basePath` unless this is set).

@@ -20,3 +20,10 @@ export function withBasePath(pathFromAppRoot: string): string {
 export function assetUrl(pathFromPublicRoot: string): string {
   return withBasePath(pathFromPublicRoot);
 }
+
+/**
+ * Same-origin fetch for app-relative paths (`/api/*`, …). Applies `NEXT_PUBLIC_BASE_PATH` automatically.
+ */
+export function appFetch(path: string, init?: RequestInit): Promise<Response> {
+  return fetch(withBasePath(path), init);
+}
