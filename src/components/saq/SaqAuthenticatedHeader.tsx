@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { withBasePath } from "@/src/lib/base-path";
 
 function sessionDisplayLabel(name?: string | null, email?: string | null) {
   if (name?.trim()) return name.trim();
@@ -133,7 +134,11 @@ export function SaqAuthenticatedHeader() {
               </p>
               <button
                 type="button"
-                onClick={() => void signOut({ callbackUrl: "/saq" })}
+                onClick={() =>
+                  void signOut({
+                    callbackUrl: `${window.location.origin}${withBasePath("/saq")}`,
+                  })
+                }
                 className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
                 Logout
