@@ -15,6 +15,17 @@ export function SaqAuthenticatedHeader() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  function handleLogout() {
+    const home = `${window.location.origin}${withBasePath("/saq")}`;
+    void signOut({ redirect: false })
+      .then(() => {
+        window.location.assign(home);
+      })
+      .catch(() => {
+        window.location.assign(home);
+      });
+  }
   const versionId = searchParams.get("versionId");
 
   const homeActive = pathname === "/saq";
@@ -132,15 +143,7 @@ export function SaqAuthenticatedHeader() {
                     "your account"}
                 </span>
               </p>
-              <button
-                type="button"
-                onClick={() =>
-                  void signOut({
-                    callbackUrl: `${window.location.origin}${withBasePath("/saq")}`,
-                  })
-                }
-                className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-              >
+              <button type="button" onClick={handleLogout} className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
                 Logout
               </button>
             </>
