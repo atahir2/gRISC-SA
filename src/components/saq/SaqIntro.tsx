@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { assetUrl } from "@/src/lib/base-path";
 import { GrissaPageHeader } from "./GrissaPageHeader";
 
 export function SaqIntro() {
@@ -126,7 +127,7 @@ export function SaqIntro() {
               
               <div className="mt-4 flex items-center gap-3">
                 <Image
-                  src="/acknowledgements/eu-funded.png"
+                  src={assetUrl("/acknowledgements/eu-funded.png")}
                   alt="Funded by the European Union"
                   width={200}
                   height={48}
@@ -134,7 +135,7 @@ export function SaqIntro() {
                   unoptimized
                 />
                 <Image
-                  src="/acknowledgements/greendigit.png"
+                  src={assetUrl("/acknowledgements/greendigit.png")}
                   alt="GreenDIGIT project"
                   width={160}
                   height={40}

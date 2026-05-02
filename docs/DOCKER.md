@@ -146,8 +146,8 @@ In your env file:
 
 Symptoms fixed in-repo: **middleware no longer depends on Supabase** for Postgres-only stacks; **`basePath`** no longer silently defaults to `/grisc-sa` in production (root deploy matches Docker unless you explicitly set `/grisc-sa` at build).
 
-1. **`NEXTAUTH_URL`** must equal the browser URL prefix users use (`https://your.host` at root, or `https://your.host/grisc-sa` under a subpath). Wrong values cause login/API errors.
+1. **`NEXTAUTH_URL`** must equal the **canonical URL users open in the browser**, including **`basePath`** — e.g. `https://mc-a4.lab.uvalight.net/grissa`. Using only `https://host` while the app lives under **`/grissa`** breaks `/api/auth/*` from the browser. Wrong schemes (`http` vs `https`) have the same effect.
 
-2. **Rebuild** whenever `NEXT_PUBLIC_BASE_PATH` changes. Root: leave empty / unset before `next build`. Subpath: set `NEXT_PUBLIC_BASE_PATH=/grisc-sa` (see `scripts/nginx-subpath.example.conf`).
+2. **Rebuild** whenever `NEXT_PUBLIC_BASE_PATH` changes. Root: unset or empty. Subpath examples: **`/grissa`**, **`/grisc-sa`** (see `scripts/nginx-subpath.example.conf`; proxy must forward the full path unchanged).
 
-3. **Reverse proxy** must pass through **`/_next/static`**, **`/_next/data`**, and other `/_next/*` routes to Node (or static files will 404 and “only the home page works”). Public assets (e.g. acknowledgement logos) use normal paths under the app’s base path; examples: `scripts/nginx-root.example.conf`, `scripts/nginx-subpath.example.conf`.
+3. **Reverse proxy** must pass **`/_next/static`**, **`/_next/data`**, and other **`/_next/*`** to Node (or JS routes break). **`public`** files resolve as **`{basePath}/your-file`** — e.g. logos at **`/grissa/acknowledgements/…`**. **`unoptimized`** `next/image` can emit **`/acknowledgements/…`** without the prefix unless you pass URLs from **`assetUrl()`** (`src/lib/base-path.ts`).
