@@ -151,3 +151,5 @@ Symptoms fixed in-repo: **middleware no longer depends on Supabase** for Postgre
 2. **Rebuild** whenever `NEXT_PUBLIC_BASE_PATH` changes. Root: unset or empty. Subpath examples: **`/grissa`**, **`/grisc-sa`** (see `scripts/nginx-subpath.example.conf`; proxy must forward the full path unchanged).
 
 3. **Reverse proxy** must pass **`/_next/static`**, **`/_next/data`**, and other **`/_next/*`** to Node (or JS routes break). **`public`** files resolve as **`{basePath}/your-file`** — e.g. logos at **`/grissa/acknowledgements/…`**. **`unoptimized`** `next/image` can emit **`/acknowledgements/…`** without the prefix unless you pass URLs from **`assetUrl()`** (`src/lib/base-path.ts`).
+
+4. **Client `fetch("/api/…")` does not add `basePath`.** Use **`withBasePath("/api/…")`** from `src/lib/base-path.ts` (used for signup and the SAQ repository API client). Omitting this causes **404** on `/api/auth/register` and **`/api/saq/repository`** while pages under `/grissa/...` still load from HTML.

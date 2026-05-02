@@ -23,9 +23,10 @@ import type {
   AssessmentVersionUpdate,
 } from "./repositories/assessment.repository.interface";
 import type { AssessmentRole } from "./permissions";
+import { withBasePath } from "@/src/lib/base-path";
 
 async function callRepositoryApi<T>(action: string, payload?: Record<string, unknown>): Promise<T> {
-  const res = await fetch("/api/saq/repository", {
+  const res = await fetch(withBasePath("/api/saq/repository"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ action, payload }),

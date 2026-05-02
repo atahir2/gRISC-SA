@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { formatAuthErrorMessage } from "@/src/lib/auth/auth-errors";
+import { withBasePath } from "@/src/lib/base-path";
 
 export function SignupForm() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export function SignupForm() {
     }
     setLoading(true);
     try {
-      const registerRes = await fetch("/api/auth/register", {
+      const registerRes = await fetch(withBasePath("/api/auth/register"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -47,7 +48,18 @@ export function SignupForm() {
           fullName: fullName.trim() || undefined,
         }),
       });
-      const registerJson = (await registerRes.json()) as { error?: string };
+      const text = await registerRes.text();
+      let registerJson: { error?: string };
+      try {
+        registerJson = text ? (JSON.parse(text) as { error?: string }) : {};
+      } catch {
+        setError(
+          registerRes.ok
+            ? "Unexpected response from server."
+            : `Registration failed (HTTP ${registerRes.status}). Check that the deployment URL includes the app path (basePath) if you use one.`,
+        );
+        return;
+      }
       if (!registerRes.ok) {
         setError(formatAuthErrorMessage(registerJson.error ?? "Failed to create account."));
         return;
@@ -59,6 +71,8 @@ export function SignupForm() {
       setEmail("");
       setPassword("");
       setConfirm("");
+    } catch {
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
