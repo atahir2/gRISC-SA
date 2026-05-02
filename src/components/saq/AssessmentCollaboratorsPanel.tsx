@@ -28,6 +28,12 @@ function roleLabel(role: AssessmentRole): string {
   }
 }
 
+function formatJoinedDate(value: Date | string): string {
+  const d = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleDateString(undefined, { dateStyle: "medium" });
+}
+
 interface AssessmentCollaboratorsPanelProps {
   assessmentId: string;
   myRole: AssessmentRole;
@@ -191,7 +197,7 @@ export function AssessmentCollaboratorsPanel({
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-slate-900">{row.email}</p>
                   <p className="mt-0.5 text-xs text-slate-500">
-                    Joined {row.createdAt.toLocaleDateString(undefined, { dateStyle: "medium" })}
+                    Joined {formatJoinedDate(row.createdAt)}
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">

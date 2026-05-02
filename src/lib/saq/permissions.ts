@@ -46,6 +46,10 @@ export function canManageCollaborators(role: AssessmentRole | null | undefined):
   return role === "owner";
 }
 
+export function canDeleteAssessment(role: AssessmentRole | null | undefined): boolean {
+  return role === "owner";
+}
+
 export function canExportReport(role: AssessmentRole | null | undefined): boolean {
   return canViewAssessment(role);
 }

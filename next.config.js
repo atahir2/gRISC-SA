@@ -8,6 +8,9 @@ const resolvedBasePath =
       : "";
 
 const nextConfig = {
+  /** Self-contained output for Docker / Node hosting (`node .next/standalone/server.js`). */
+  output: "standalone",
+
   /**
    * Production is served at https://host/grisc-sa/ — Next must use this prefix on all
    * redirects and client navigations. Without it, /saq is sent to https://host/saq (404).

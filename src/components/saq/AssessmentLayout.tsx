@@ -26,9 +26,8 @@ import {
   type ActionMetadata,
 } from "@/src/lib/saq/assessment.repository";
 import { canEditAssessment, canEditAssessmentVersionContent } from "@/src/lib/saq/permissions";
-import { AssessmentCollaboratorsPanel } from "./AssessmentCollaboratorsPanel";
-import { AssessmentVersionsPanel } from "./AssessmentVersionsPanel";
 import { useAssessmentVersionRoute } from "./useAssessmentVersionRoute";
+import { GrissaPageHeader } from "./GrissaPageHeader";
 
 const STEPS = ["Scope & Goals", "Questionnaire", "Results", "Action Plan"] as const;
 
@@ -46,8 +45,6 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
     versionError,
     effectiveVersionId,
     currentVersion,
-    reloadVersions,
-    navigateToVersion,
   } = useAssessmentVersionRoute(assessmentId);
 
   const [dataLoading, setDataLoading] = useState(!!assessmentId);
@@ -193,6 +190,18 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
     }
   }, [assessmentId, effectiveVersionId, effortByQuestionId, actionMetadataByQuestionId, canEditThisVersion]);
 
+  const saveAllProgress = useCallback(async () => {
+    if (!assessmentId || !effectiveVersionId || !canEditThisVersion) return;
+    setSaveStatus("saving");
+    try {
+      await Promise.all([persistScope(), persistAnswers(), persistActionMetadata()]);
+      setSaveStatus("saved");
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    } catch {
+      setSaveStatus("error");
+    }
+  }, [assessmentId, effectiveVersionId, canEditThisVersion, persistScope, persistAnswers, persistActionMetadata]);
+
   const assessmentResults = useMemo(
     () => buildAssessmentResults(scopeSelections, answers),
     [scopeSelections, answers]
@@ -268,12 +277,14 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
   }, [assessmentId, currentStep, persistScope, persistAnswers]);
 
   const combinedError = versionError || loadError;
+  const showSaveButton = !!assessmentId && canEditThisVersion;
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-slate-50">
-        <div className="mx-auto max-w-5xl px-4 py-16 text-center">
-          <p className="text-slate-600">Loading assessment…</p>
+      <main className="min-h-0 flex-1 bg-transparent">
+      <div className="mx-auto max-w-7xl px-4 py-16 text-center">
+          <p className="text-slate-400">Loading assessment…</p>
+          <div className="mx-auto mt-4 h-1 w-32 animate-pulse rounded bg-slate-600" />
         </div>
       </main>
     );
@@ -281,8 +292,8 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
 
   if (combinedError && assessmentId) {
     return (
-      <main className="min-h-screen bg-slate-50">
-        <div className="mx-auto max-w-5xl px-4 py-16">
+      <main className="min-h-0 flex-1 bg-transparent">
+        <div className="mx-auto max-w-7xl px-4 py-16">
           <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
             {combinedError.includes("Access denied") ? (
               <>
@@ -295,10 +306,10 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
           </div>
           <button
             type="button"
-            onClick={() => router.push("/saq")}
+            onClick={() => router.push("/saq/manage")}
             className="mt-4 text-sm font-medium text-emerald-600 hover:underline"
           >
-            Back to SAQ
+            Back to assessments
           </button>
         </div>
       </main>
@@ -306,20 +317,17 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
-        <header className="mb-6">
-          <h1 className="text-2xl font-semibold text-slate-900 sm:text-3xl">
-            Sustainability Self-Assessment
-          </h1>
-          <p className="mt-1 text-sm text-slate-600 sm:text-base">
-            Prepare a certification baseline for your Research Infrastructure by defining scope, answering the questionnaire, and reviewing results and recommended actions.
-          </p>
+    <main className="min-h-0 flex-1 bg-transparent pb-12">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <GrissaPageHeader
+          title="GRISSA Assessment"
+          description="Prepare a certification baseline for your Research Infrastructure by defining scope, answering the questionnaire, and reviewing results and recommended actions."
+        >
           {assessmentName && (
-            <p className="mt-2 text-sm font-medium text-slate-700">
+            <p className="mt-2 text-sm font-medium text-slate-300">
               Assessment: {assessmentName}
               {myRole && (
-                <span className="ml-2 inline-flex rounded-full bg-slate-200 px-2 py-0.5 text-xs font-medium text-slate-800">
+                <span className="ml-2 inline-flex rounded-full bg-slate-700 px-2 py-0.5 text-xs font-medium text-slate-100">
                   {myRole === "owner"
                     ? "Owner"
                     : myRole === "editor"
@@ -346,27 +354,13 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
             </p>
           )}
           {assessmentId && canEditThisVersion && (
-            <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
+            <div className="mt-2 flex items-center gap-2 text-sm text-slate-400">
               {saveStatus === "saving" && <span>Saving…</span>}
               {saveStatus === "saved" && <span className="text-emerald-600">Saved</span>}
               {saveStatus === "error" && <span className="text-red-600">Save failed</span>}
             </div>
           )}
-        </header>
-
-        {assessmentId && myRole && effectiveVersionId && (
-          <div className="mb-6">
-            <AssessmentVersionsPanel
-              assessmentId={assessmentId}
-              myRole={myRole}
-              versions={versions}
-              currentVersion={currentVersion}
-              currentVersionId={effectiveVersionId}
-              onVersionsChanged={reloadVersions}
-              onSelectVersion={navigateToVersion}
-            />
-          </div>
-        )}
+        </GrissaPageHeader>
 
         <div className="mb-6 flex flex-wrap items-center gap-4 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
           <div className="flex items-center gap-2 border-r border-slate-200 pr-4">
@@ -390,6 +384,39 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
             <div>
               <span className="text-slate-500">Completion: </span>
               <span className="font-semibold text-emerald-700">{completionPct}%</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-6 rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <button
+              type="button"
+              disabled={!canGoBack}
+              onClick={goBack}
+              className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Back
+            </button>
+            <div className="flex items-center gap-2">
+              {showSaveButton && (
+                <button
+                  type="button"
+                  onClick={() => void saveAllProgress()}
+                  disabled={saveStatus === "saving"}
+                  className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50"
+                >
+                  {saveStatus === "saving" ? "Saving..." : "Save progress"}
+                </button>
+              )}
+              <button
+                type="button"
+                disabled={!canGoNext}
+                onClick={goNext}
+                className="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {currentStep === STEPS.length - 1 ? "Finish" : "Next"}
+              </button>
             </div>
           </div>
         </div>
@@ -448,7 +475,7 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
               </p>
             )}
 
-            <div className="mt-8 flex items-center justify-between border-t border-slate-200 pt-6">
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-6">
               <button
                 type="button"
                 disabled={!canGoBack}
@@ -457,23 +484,38 @@ export function AssessmentLayout({ assessmentId }: AssessmentLayoutProps) {
               >
                 Back
               </button>
-              <span className="text-sm text-slate-500">
-                Step {currentStep + 1} of {STEPS.length}
-              </span>
-              <button
-                type="button"
-                disabled={!canGoNext}
-                onClick={goNext}
-                className="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {currentStep === STEPS.length - 1 ? "Finish" : "Next"}
-              </button>
+              <div className="flex items-center gap-2">
+                {showSaveButton && (
+                  <button
+                    type="button"
+                    onClick={() => void saveAllProgress()}
+                    disabled={saveStatus === "saving"}
+                    className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50"
+                  >
+                    {saveStatus === "saving" ? "Saving..." : "Save progress"}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  disabled={!canGoNext}
+                  onClick={goNext}
+                  className="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {currentStep === STEPS.length - 1 ? "Finish" : "Next"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {assessmentId && myRole && (
-          <AssessmentCollaboratorsPanel assessmentId={assessmentId} myRole={myRole} />
+        {assessmentId && myRole && versions.length > 1 && (
+          <div className="mt-6 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm">
+            You are currenlty viewing version{" "}
+            <span className="font-medium text-slate-900">
+              {currentVersion ? `v${currentVersion.versionNumber}` : "unknown"}
+            </span>
+            . Manage versions and team access from Workspace.
+          </div>
         )}
       </div>
     </main>

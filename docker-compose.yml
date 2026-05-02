@@ -1,0 +1,75 @@
+# SAQ / GRISSA — Next.js + PostgreSQL + Adminer
+#
+# Prerequisites: copy .env.docker.example to .env.docker
+#
+#   docker compose --env-file .env.docker up --build -d
+#
+# Apply migrations once (uses profile `migrate`):
+#   docker compose --profile migrate --env-file .env.docker run --rm db-migrate
+
+name: saq
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: grisc-postgres
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    ports:
+      - "${POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - saq_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BASE_PATH: ${NEXT_PUBLIC_BASE_PATH:-}
+    container_name: saq-app
+    restart: unless-stopped
+    ports:
+      - "${APP_HOST_PORT:-3000}:3000"
+    env_file:
+      - .env.docker
+    environment:
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  adminer:
+    image: adminer:4
+    container_name: saq-adminer
+    restart: unless-stopped
+    ports:
+      - "${ADMINER_HOST_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  db-migrate:
+    image: node:20-bookworm-slim
+    container_name: saq-db-migrate
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - db_migrate_node_modules:/app/node_modules
+    env_file:
+      - .env.docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - migrate
+    command: ["sh", "-c", "npm ci && npm run db:migrate"]
+
+volumes:
+  saq_postgres_data:
+  db_migrate_node_modules:

@@ -56,7 +56,7 @@ The tool supports internal decision-making as well as preparation for sustainabi
 
 * **Frontend:** Next.js (App Router), React
 * **Styling:** Tailwind CSS
-* **Backend / DB:** Supabase
+* **Backend / DB:** PostgreSQL (Drizzle ORM; optional Supabase path where still wired)
 * **Data Model:** JSON-based questionnaire + relational persistence
 * **Export:** HTML-based PDF rendering
 
@@ -74,7 +74,7 @@ The system follows a modular architecture:
 ### 2. Runtime Assessment Layer
 
 * Stores user responses and scope selections
-* Managed via Supabase
+* Managed via the configured repository (**Postgres** or legacy **Supabase** via `SAQ_DATABASE_PROVIDER`)
 
 ### 3. SAQ Engine
 
@@ -132,12 +132,18 @@ npm install
 
 ### 2. Configure environment
 
-Create a `.env.local` file:
+For **PostgreSQL + NextAuth** (recommended), create `.env.local` with at least:
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=your_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DATABASE
+SAQ_DATABASE_PROVIDER=postgres
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-long-random-secret
 ```
+
+Set `NEXTAUTH_SECRET` to a strong value (never commit real secrets).
+
+A legacy Supabase-based setup may still require `NEXT_PUBLIC_SUPABASE_*` variables where that code path is enabled.
 
 ### 3. Run the development server
 
@@ -153,12 +159,72 @@ http://localhost:3000
 
 ---
 
+## Docker (full stack)
+
+Run **Next.js + PostgreSQL + Adminer** with one Compose file:
+
+1. Copy `.env.docker.example` → `.env.docker` and set secrets (see template).
+2. Start: `docker compose --env-file .env.docker up --build -d` (or `npm run docker:up`).
+3. Apply migrations once:  
+   `docker compose --profile migrate --env-file .env.docker run --rm db-migrate` (or `npm run docker:migrate`).
+4. App: [http://localhost:3000](http://localhost:3000) · Adminer: [http://localhost:8080](http://localhost:8080).
+
+Stopping: `docker compose --env-file .env.docker down` (`npm run docker:down`).  
+**Never use `down -v` unless you intend to wipe the database volume.**
+
+Full step-by-step, verification, and port overrides: **[docs/DOCKER.md](docs/DOCKER.md)**.
+
+---
+
+## Database tooling (npm)
+
+- `npm run db:generate` — generate Drizzle migrations from `drizzle/schema.ts`
+- `npm run db:migrate` — apply migrations (requires `DATABASE_URL`)
+- `npm run db:studio` — Drizzle Studio against the configured database
+
+Compose helpers:
+
+- `npm run docker:up` / `docker:down` / `docker:migrate`
+
+---
+
 ## Development Guidelines
 
 * Business logic must remain inside `src/lib/saq/engine/`
 * Do not persist derived results (scores, actions) in the database
 * The report page must remain the single source of truth for PDF export
 * UI components should consume engine outputs, not reimplement logic
+
+---
+
+## Navigation and Workflow
+
+Authenticated flow:
+
+1. Login / signup
+2. `/saq` (GRISSA introduction page)
+3. `/saq/manage` (assessment workspace)
+   - start new assessment
+   - resume/open assessment
+   - view dashboard/report
+   - manage team/access and versions (role-dependent)
+   - delete assessment (owner only, with confirmation)
+4. `/saq/assessment/[assessmentId]`
+   - step-based assessment workflow
+   - explicit **Save progress** button (scope, answers, action metadata)
+5. `/saq/dashboard/[assessmentId]` and `/saq/report/[assessmentId]`
+   - clear navigation back to assessment editor and assessment workspace
+
+Branding:
+- Tool label: **GRISSA**
+- Expanded form: **Green Research Infrastructure Sustainability Self Assessment**
+- Main nav items: **Home** and **Workspace**
+
+Role-aware behavior:
+
+- Owner: delete, manage team access, create versions, edit draft content
+- Editor: edit draft content, create versions
+- Reviewer/Viewer: read-only access
 
 ---
 

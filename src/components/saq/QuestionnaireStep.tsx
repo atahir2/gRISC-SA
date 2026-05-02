@@ -50,8 +50,12 @@ export function QuestionnaireStep({
   const getAnswer = (questionId: string): AssessmentAnswer | undefined =>
     answers.find((a) => a.questionId === questionId);
 
-  const upsertAnswer = (questionId: string, score: CapabilityScore) => {
+  const upsertAnswer = (questionId: string, score: CapabilityScore | undefined) => {
     if (readOnly) return;
+    if (score === undefined) {
+      onChange(answers.filter((a) => a.questionId !== questionId));
+      return;
+    }
     const existing = getAnswer(questionId);
     const base: AssessmentAnswer =
       existing ?? {
@@ -110,7 +114,8 @@ export function QuestionnaireStep({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <SectionHeader
           title="Questionnaire"
-          subtitle="Answer each in-scope question with a capability level (1–3). Level 1 = initial; 3 = mature."
+          subtitle="Answer each in-scope question with the current capability level (1–3). 
+          Level 1 = initial; 2 = developing; 3 = established."
         />
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <SummaryCard

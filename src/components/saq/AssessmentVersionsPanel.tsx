@@ -28,6 +28,7 @@ interface AssessmentVersionsPanelProps {
   currentVersionId: string | null;
   onVersionsChanged: () => void | Promise<void>;
   onSelectVersion: (versionId: string) => void;
+  showCreateButton?: boolean;
 }
 
 export function AssessmentVersionsPanel({
@@ -38,6 +39,7 @@ export function AssessmentVersionsPanel({
   currentVersionId,
   onVersionsChanged,
   onSelectVersion,
+  showCreateButton = true,
 }: AssessmentVersionsPanelProps) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,9 +91,15 @@ export function AssessmentVersionsPanel({
     <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
-            Version
-          </span>
+        {currentVersion && (
+            <span
+              className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200"
+              title="Data shown and saved for this version"
+            >
+              Current Version:
+            </span>
+          )}
+          
           <select
             id="saq-version-select"
             className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
@@ -107,20 +115,17 @@ export function AssessmentVersionsPanel({
               </option>
             ))}
           </select>
-          {currentVersion && (
-            <span
-              className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200"
-              title="Data shown and saved for this version"
-            >
-              Current
-            </span>
-          )}
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           {canEditMeta && currentVersion && (
             <label className="flex items-center gap-2 text-sm text-slate-600">
-              <span className="whitespace-nowrap">Status</span>
+              <span
+              className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200"
+              title="Version status"
+            >
+              Current Status:
+            </span>
               <select
                 className="rounded-md border border-slate-300 bg-white px-2 py-1 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 value={currentVersion.status}
@@ -136,14 +141,14 @@ export function AssessmentVersionsPanel({
               </select>
             </label>
           )}
-          {canCreate && (
+          {canCreate && showCreateButton && (
             <button
               type="button"
               disabled={busy}
               onClick={handleCreate}
               className="inline-flex items-center rounded-md border border-emerald-600 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-800 hover:bg-emerald-100 disabled:opacity-50"
             >
-              {busy ? "Working…" : "New version"}
+              {busy ? "Working…" : "Create New version"}
             </button>
           )}
         </div>

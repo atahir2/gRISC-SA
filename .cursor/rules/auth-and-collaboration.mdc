@@ -1,6 +1,6 @@
 ---
-description: Supabase Auth, routes, collaboration roles, and permission helpers
-globs: "{src/lib/auth/**/*.ts,src/lib/saq/permissions.ts,middleware.ts,src/app/auth/**/*.tsx,src/app/login/**/*.tsx,src/app/signup/**/*.tsx,src/lib/supabase/middleware.ts,src/components/auth/**/*.tsx}"
+description: Auth, routes, collaboration roles, and permission helpers
+globs: "{src/lib/auth/**/*.ts,src/lib/saq/permissions.ts,middleware.ts,src/app/api/auth/**/*.ts,src/app/auth/**/*.tsx,src/app/login/**/*.tsx,src/app/signup/**/*.tsx,src/lib/supabase/middleware.ts,src/components/auth/**/*.tsx,src/components/saq/SaqAuthenticatedHeader.tsx}"
 alwaysApply: false
 ---
 
@@ -8,9 +8,10 @@ alwaysApply: false
 
 ## Authentication
 
-- **Supabase Auth** (email/password): `src/lib/supabase/client.ts` (browser), `server.ts` (server components), `middleware.ts` + `src/lib/supabase/middleware.ts` (session refresh / protected routes).
-- **Public:** `/saq` landing (CTA when logged out). **Protected by middleware:** `/saq/assessment/*`, `/saq/dashboard/*`, `/saq/report/*` → redirect to `/login?next=…`.
-- **Email confirmation:** `signUp` uses `emailRedirectTo` → `/auth/callback?next=/saq`. Configure **Site URL**, **Redirect URLs** (include `/auth/callback`), and optional `NEXT_PUBLIC_SITE_URL` in env (see `env.example`).
+- **Primary app auth:** **NextAuth** (credentials) with PostgreSQL-backed users via Drizzle adapter (`src/lib/auth/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`). Client surfaces **`SessionProvider`** and **`useSession`** (e.g. **`SaqAuthenticatedHeader`**: Login / Sign up when logged out; signed-in label + Logout; post-logout redirect configurable via env).
+- **Legacy / transitional:** Supabase client + **`middleware.ts`** may still consult Supabase session helpers for route protection—keep behavior aligned when changing auth so assessment/dashboard/report gates stay consistent.
+- **Public:** `/saq` intro (**`SaqIntro`**). **Protected by middleware:** `/saq/assessment/*`, `/saq/dashboard/*`, `/saq/report/*` → redirect to `/login?next=…` when unauthenticated.
+- **OAuth / legacy email code exchange:** `/auth/callback` may still exchange `?code=` via Supabase where that path is enabled; credentials sign-up/sign-in flows use NextAuth forms.
 
 ## Persistence (auth-related tables)
 

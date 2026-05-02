@@ -6,7 +6,8 @@ Related docs:
 
 - `docs/SAQ_ARCHITECTURE.md` - concise technical architecture reference
 - `docs/SAQ_DEVELOPMENT_WORKFLOW.md` - safe implementation workflow and memory usage
-- `docs/SAQ_SUPABASE_SETUP.md` - persistence setup and runtime table bootstrap
+- `docs/DOCKER.md` - Docker Compose (Postgres + Next.js + Adminer) and migrations
+- `docs/SAQ_SUPABASE_SETUP.md` - legacy Supabase deployment/setup notes (when applicable)
 
 ---
 
@@ -19,12 +20,12 @@ If you are new to this project and need to be productive quickly:
    - Refer back to sections 4–7 when you touch engine, questionnaire, or repositories.
 
 2. **Run the app**  
-   - Ensure Supabase is running and environment variables are set (see `docs/SAQ_SUPABASE_SETUP.md`).  
+   - Set environment variables (`DATABASE_URL`, `SAQ_DATABASE_PROVIDER`, `NEXTAUTH_*`, etc.); for Postgres locally use `.env.local` or Docker Compose (`docs/DOCKER.md`).  
    - From the project root: `npm install` (once) and `npm run dev`.
 
 3. **Explore the user workflow**  
-   - Sign in (or use **Sign up**); `/saq` is public, the assessment flow and dashboard/report require authentication.  
-   - Go to `/saq`, create a new assessment, and walk through: **Scope & goals → Questionnaire → Results → Action plan → Dashboard → Report/PDF**.  
+   - Sign in (or use **Sign up**); **`/saq`** (Home) is public; the assessment flow and dashboard/report require authentication.  
+   - Open **`/saq/manage`** (Workspace), create a new assessment, and walk through: **Scope & goals → Questionnaire → Results → Action plan → Dashboard → Report/PDF**.  
    - Notice how results and action plans change live as you edit answers/scope.
 
 4. **Understand the three core layers**  
@@ -33,7 +34,8 @@ If you are new to this project and need to be productive quickly:
    - Engine: `src/lib/saq/engine/*` (pure functions for scoring, results, actions).
 
 5. **Find the UI entry points**  
-   - Landing and assessment management: `src/app/saq/page.tsx` → `SaqLanding`.  
+   - Intro (**Home**): `src/app/saq/page.tsx` → **`SaqIntro`** (public).  
+   - Workspace / assessment list: `src/app/saq/manage/page.tsx` → **`SaqLanding`** (authenticated workflow hub).  
    - Assessment flow: `src/app/saq/assessment/[assessmentId]/page.tsx` → `AssessmentLayout` and step components.  
    - Dashboard: `src/app/saq/dashboard/[assessmentId]/page.tsx` → `AssessmentDashboard`.  
    - Report/PDF: `src/app/saq/report/[assessmentId]/page.tsx` → `AssessmentReport`.
@@ -71,7 +73,9 @@ It is **not a certification system** itself. It helps organisations prepare for 
 - **Next.js** (App Router)
 - **React**
 - **Tailwind CSS**
-- **Supabase (PostgreSQL + Auth)** — persistence for assessments, scope, answers, action metadata, user profiles, and optional per-assessment collaborators; see `docs/SAQ_SUPABASE_SETUP.md`
+- **PostgreSQL + Drizzle ORM** — target persistence architecture for runtime SAQ data and Auth.js tables
+- **Auth.js / NextAuth** — app-managed authentication direction (credentials-based pilot path implemented)
+- **Supabase (legacy/transition)** — still present in active paths for parts of repository access and transitional auth/session coupling
 - **PDF export** — `@react-pdf/renderer` via `AssessmentReportPDF` and engine-derived report data
 
 ---
@@ -83,10 +87,10 @@ The system is intentionally split into three logical layers plus a repository la
 | Layer | Description |
 |-------|-------------|
 | **Static questionnaire configuration** | Master themes, scope items, questions, and answer options. File-based only; never changed per user. |
-| **Runtime assessment state** | Per-assessment data: assessments, scope selections, answers, and action metadata. Persisted in Supabase. |
+| **Runtime assessment state** | Per-assessment data: assessments, scope selections, answers, and action metadata. Persisted in **PostgreSQL** (default direction) or **Supabase** when `SAQ_DATABASE_PROVIDER=supabase`. |
 | **SAQ engine modules** | Pure TypeScript modules for scoring, results, and action plan generation. No UI and no DB access. Consume static config + runtime state and produce derived results. |
-| **Repository layer** | IO boundary that loads the static questionnaire and reads/writes runtime state to Supabase. UI uses the repository and shared Supabase clients (not ad-hoc table access). |
-| **Access control** | Supabase Auth + RLS; role checks for collaboration are centralized in `permissions.ts` (separate from the engine). |
+| **Repository layer** | IO boundary that loads the static questionnaire and reads/writes runtime state (**Postgres via Drizzle** or **Supabase** per `SAQ_DATABASE_PROVIDER`). UI uses the repository facade (not ad-hoc table access). |
+| **Access control** | NextAuth-backed sessions for app login; role checks in `permissions.ts` + repository; **RLS** when using the Supabase-hosted DB path. |
 
 Derived results (scores, priorities, summaries) are **always recomputed in memory** and never persisted.
 
@@ -162,20 +166,22 @@ Engine functions are reused from both the multi-step assessment flow, the dashbo
 **Location:** `src/lib/saq/`
 
 - `questionnaire.repository.ts` — thin wrapper around `questionnaire.data.json` (see section 4).
-- `assessment.repository.ts` — IO boundary for Supabase runtime tables.
+- `assessment.repository.ts` — stable IO boundary/facade.
+- `repositories/assessment.repository.postgres.ts` — Postgres implementation (Drizzle).
+- `repositories/assessment.repository.supabase.ts` — legacy/transition implementation.
 
-`assessment.repository.ts` responsibilities:
+Current facade responsibilities:
 
-- Create and list **assessments** (owned and shared via `list_my_assessments` RPC where applicable).
-- Resolve **access** per assessment (`getAssessmentAccess`) for ownership and collaborator roles.
-- **Collaborators** (owner-only mutations): list/add/update/remove via table and RPCs (`list_assessment_collaborators`, `add_assessment_collaborator_by_email`, etc.).
-- Save and load **scope selections** and **answers** (enforcing edit vs view access).
+- Create and list **assessments**.
+- Resolve **access** per assessment (`getAssessmentAccess`) for ownership and collaborator roles (implementation depends on active provider).
+- **Collaborators** (owner-only mutations): list/add/update/remove via repository APIs.
+- Save and load **scope selections** and **answers**.
 - Save and load **action items / metadata** (effort, leader, deadline, status, remarks).
-- Map between DB row types (from `supabase/database.types.ts`) and domain types from `assessment.types.ts`.
+- Map between DB row types and domain types from `assessment.types.ts`.
 
 **`permissions.ts`** — pure helpers (`canEditAssessment`, `canManageCollaborators`, …) used by UI; not part of the engine.
 
-UI code uses the shared Supabase browser client through repositories and auth flows; no duplicate scoring logic.
+UI code uses the repository facade and engine modules; no duplicate scoring logic.
 
 ---
 
@@ -184,10 +190,12 @@ UI code uses the shared Supabase browser client through repositories and auth fl
 ### 8.1 Top-level routing
 
 - `src/app/page.tsx` — redirects to `/saq`.
-- `src/app/saq/page.tsx` — SAQ landing page (`SaqLanding`); public, with sign-in / sign-up CTA when logged out.
-- `src/app/login/page.tsx`, `src/app/signup/page.tsx` — email/password auth.
-- `src/app/auth/callback/route.ts` — exchanges Supabase auth `code` (e.g. after email confirmation) and redirects (default `/saq`).
+- `src/app/saq/page.tsx` — public **GRISSA Home** intro (`SaqIntro`).
+- `src/app/saq/manage/page.tsx` — **Workspace** (`SaqLanding`): list/create assessments (requires sign-in for full use).
+- `src/app/login/page.tsx`, `src/app/signup/page.tsx` — **NextAuth** credentials (email/password).
+- `src/app/auth/callback/route.ts` — legacy **Supabase** `?code=` exchange for OAuth/email flows when applicable; otherwise sign-in uses NextAuth forms.
 - `middleware.ts` — protects `/saq/assessment/*`, `/saq/dashboard/*`, `/saq/report/*` (redirect to `/login?next=…` when unauthenticated).
+- `src/app/saq/layout.tsx` — shared **GRISSA** header (Home, Workspace) and dark page shell for all `/saq/*` routes.
 - `src/app/saq/assessment/[assessmentId]/page.tsx` — multi-step assessment flow for a given assessment.
 - `src/app/saq/assessment/page.tsx` — redirect helper; goes back to `/saq`.
 - `src/app/saq/dashboard/[assessmentId]/page.tsx` — dashboard overview for an assessment (`AssessmentDashboard`).
@@ -195,23 +203,19 @@ UI code uses the shared Supabase browser client through repositories and auth fl
 
 Global layout: `src/app/layout.tsx` (injects global styles and metadata).
 
-### 8.2 Landing & assessment management
+### 8.2 Home vs Workspace
 
-**Components:**
+**`SaqIntro`** (`/saq`, public):
 
-- `SaqLanding` — orchestrates the landing page:
-  - Renders `WelcomeHero` (high-level introduction: what the tool is, who it is for, what it produces, how it helps).
-  - Shows “How it works” cards (4 steps).
-  - When logged in: “Start a new assessment” form (organisation name → creates assessment and routes into the flow); lists owned and shared assessments via `AssessmentListCard` (role may be shown).
-  - When logged out: sign-in / sign-up CTA; no assessment list.
-- `WelcomeHero` — communication-focused hero explaining:
-  - what the SAQ is
-  - who it is for
-  - what outputs it provides (results overview, priority summary, action plan, PDF report)
-  - how it helps build a sustainability baseline for certification, standards, regulations/directives, and internal planning.
-- `HowItWorksCard` — small cards describing the 4-step process: Scope & Goals → Questionnaire → Results & Dashboard → Action Plan & Report.
-- `AssessmentListCard` — displays each assessment (organisation name, created/updated dates, and quick actions: **Open / Resume**, **Dashboard**, **Report**, **Export PDF**).
-- `EmptyAssessmentsState` — friendly message when no assessments exist yet.
+- **`GrissaPageHeader`** title **“GRISSA Home”** and intro copy; content sections + acknowledgement/footer pattern.
+- Link to **`/saq/manage`** (“Proceed to Workspace”) for authenticated workflow.
+
+**`SaqLanding`** (`/saq/manage`, workspace):
+
+- **`GrissaPageHeader`** **“GRISSA Workspace”**; **Start a new assessment** form; lists assessments via **`AssessmentListCard`** (with **Dashboard / Report / Export** quick actions where applicable).
+- **`EmptyAssessmentsState`** when the list is empty.
+
+Assessment **management** for a single assessment (team, versions) uses dedicated routes/components (e.g. **`AssessmentManagementWorkspace`**) from Workspace navigation.
 
 ### 8.3 Assessment flow (Scope → Questionnaire → Results → Action plan)
 
@@ -238,6 +242,9 @@ The flow persists runtime state through `assessment.repository.ts` and never wri
 
 **AssessmentDashboard**:
 
+- Uses the shared **`/saq` layout** (nav + dark canvas).
+- **`DashboardInfoBanner`** — contextual paragraph (same *family* of styling as the report info banner).
+- Top **metadata / quick-actions** card: organisation, version, status, created/updated, links (resume, report, export).
 - Loads:
   - assessment (name, created/updated)
   - scope selections
@@ -264,8 +271,8 @@ The flow persists runtime state through `assessment.repository.ts` and never wri
 
 UI helpers:
 
-- `DashboardSection` — section wrapper with headings and optional “large” title size for the main overview section.
-- `DashboardInfoBanner` — contextual paragraph explaining what the dashboard summarises and how to use it (tracking progress, stakeholder communication, baseline preparation).
+- `DashboardSection` — section titles/subtitles for **canvas** (light text on dark) vs in-card content.
+- `ReadinessHeroCard` — “Overall readiness” summary (engine interpretation) in a **flat white** card for legibility.
 
 The dashboard reuses the same engine outputs as the multi-step flow; it does **not** implement its own scoring logic.
 
@@ -275,24 +282,25 @@ The dashboard reuses the same engine outputs as the multi-step flow; it does **n
 
 The report page:
 
-- Computes engine-derived results and action-plan data (`buildAssessmentResults(...)` and `buildActionPlan(...)`) and passes the composed report payload to `AssessmentReportPDF`.
-- Renders a print-friendly summary:
-  - header (organisation, dates)
-  - summary metrics
-  - per-theme sections
-  - action table with priorities and effort
-- PDF export uses `@react-pdf/renderer` via `AssessmentReportPDF` (not `html2canvas`/`jsPDF`):
+- **`ReportInfoBanner`** under the page title (purpose / disclaimer; **`print:hidden`**); aligns with dashboard banner styling.
+- Computes engine-derived results and action-plan data (`buildAssessmentResults(...)` and `buildActionPlan(...)`) and passes data to **`AssessmentReportPDF`** for download.
+- Screen layout: **metadata + quick actions** toolbar; white **report body** card; avoids repeating the same meta blocks unnecessarily (`ReportPurposeNote` may be print-oriented when the banner carries the same copy).
+- PDF export uses `@react-pdf/renderer` via `AssessmentReportPDF` (not DOM screenshot):
   - purely a **presentation/export layer** — no changes to engine or persistence.
 
 UI helpers for the report:
 
-- `MethodologyNote`, `ReadinessLegend`, `ActionPlanSectionIntro`, `ReportActionGroup`, `ReportActionItemCard`, `StrategicRecommendationsCard`, etc.
+- `ReportMetaList`, `MethodologyNote`, `ReadinessLegend`, `ActionPlanSectionIntro`, `ReportActionGroup`, `ReportActionItemCard`, `StrategicRecommendationsCard`, etc.
 
 ---
 
-## 9. Supabase persistence
+## 9. Persistence (PostgreSQL + optional legacy Supabase)
 
-Runtime persistence is implemented via `assessment.repository.ts` and Supabase tables (see `supabase/migrations/...` and `docs/SAQ_SUPABASE_SETUP.md`):
+- **Selector:** `SAQ_DATABASE_PROVIDER` → `postgres` (Drizzle + `DATABASE_URL`) or `supabase` (legacy client path).
+- **Migrations (Postgres):** `drizzle/migrations/` via **`npm run db:migrate`** (see `docs/DOCKER.md` for Compose).
+- **Docker:** production-like stack (Next.js + Postgres + Adminer) documented in **`docs/DOCKER.md`**.
+
+Runtime tables (same logical model whether hosted on Postgres or Supabase):
 
 - **profiles** — linked to `auth.users`; optional `full_name`, `organisation_name`.
 - **assessments**
@@ -309,13 +317,13 @@ Runtime persistence is implemented via `assessment.repository.ts` and Supabase t
   - columns: `assessment_id`, `question_id`, `effort_required`, `leader`, `deadline`, `status`, `remarks`
   - used to persist action metadata and effort per question; the engine consumes this to derive implementation priority.
 
-**Auth:** Supabase Auth (JWT) with RLS; SQL helpers (`rls_user_has_assessment_access`, etc.) avoid recursive policies on collaborators. The static questionnaire is **not** represented in Supabase.
+Auth for the app is **NextAuth** with user rows persisted via the Drizzle adapter (PostgreSQL). Static questionnaire remains file-based and is **not** represented in DB.
 
 ---
 
 ## 10. Current capabilities (implemented)
 
-- **Accounts:** Sign up, sign in, sign out; email confirmation flow with `/auth/callback`; optional `NEXT_PUBLIC_SITE_URL` for correct redirect targets.
+- **Accounts:** Sign up, sign in, sign out via **NextAuth** (credentials); legacy `/auth/callback` path may still apply for old Supabase OAuth/email-code flows.
 - **Access:** Assessments owned by the signed-in user; **collaboration** with roles (owner, editor, reviewer, viewer); centralized helpers in `permissions.ts`.
 - Scope selection (in-scope toggle, optional target capability 1–3 per scope item).
 - Questionnaire answering (1–3 per question; only in-scope questions shown).
@@ -326,13 +334,9 @@ Runtime persistence is implemented via `assessment.repository.ts` and Supabase t
   - effort and metadata persisted
   - implementation priority derived from scoring + effort.
 - Multi-step assessment UI with stepper, validation, and persisted state; **team & access** panel for owners; read-only UX for non-editors where applicable.
-- SAQ landing page with:
-  - clear welcome/introduction (`WelcomeHero`)
-  - “How it works” overview
-  - authenticated “Start a new assessment” flow and assessment list (owned + shared)
-  - sign-in / sign-up when logged out.
+- **Home** (`SaqIntro`) and **Workspace** (`SaqLanding`) as described in §8.2.
 - Dashboard (`AssessmentDashboard`) with read-only metrics, theme performance, and action distribution.
-- Report page (`AssessmentReport`) with HTML-based report and **PDF export**.
+- Report page (`AssessmentReport`) with web report and **`@react-pdf/renderer` PDF export**.
 
 ---
 
@@ -342,7 +346,7 @@ Runtime persistence is implemented via `assessment.repository.ts` and Supabase t
   - Lives only in `questionnaire.data.json`, accessed via `questionnaire.repository.ts`.
 - **Derived results are never persisted.**
   - Completion, pass levels, target status, improvement priority, implementation priority, and theme summaries are recomputed from scope selections + answers + action metadata + static questionnaire.
-- **Only runtime state is stored in Supabase:**
+- **Only runtime state is stored in the database** (Postgres or Supabase per deployment):
   - profiles, assessments (with owner), collaborators, scope selections, answers, and action metadata (effort, leader, deadline, status, remarks).
 - **UI must reuse engine modules and repositories.**
   - Components call the questionnaire repository + engine functions instead of reimplementing scoring or results logic.

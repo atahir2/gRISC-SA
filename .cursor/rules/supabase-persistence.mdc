@@ -1,12 +1,14 @@
 ---
-description: Persistence boundaries and safe Supabase update practices
+description: Legacy Supabase persistence boundaries and safe update practices
 globs: "{src/lib/supabase/**/*.ts,src/lib/saq/assessment.repository.ts,supabase/migrations/**/*.sql}"
 alwaysApply: false
 ---
 
-# Supabase Persistence Rules
+# Supabase Persistence Rules (legacy path)
 
-Applies to `src/lib/supabase/`, `src/lib/saq/assessment.repository.ts`, and migrations.
+Use when **`SAQ_DATABASE_PROVIDER=supabase`** or when editing Supabase clients/migrations. For the **Postgres/Drizzle** path, see **`postgres-persistence.mdc`**.
+
+Applies to `src/lib/supabase/`, Supabase-oriented repository code paths, and `supabase/migrations/`.
 
 ## Persisted Runtime State
 
