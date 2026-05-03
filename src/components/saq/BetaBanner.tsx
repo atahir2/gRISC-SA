@@ -9,7 +9,7 @@ export function BetaBanner() {
     >
       <strong className="font-semibold text-amber-50">Beta Version</strong>
       {" — "}
-      This release is still under active development; more features, capabilities, and polish
+      This release is under active development; more features and improvements
       are on the way. Your feedback is welcome.
     </div>
   );
