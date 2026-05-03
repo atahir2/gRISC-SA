@@ -1,4 +1,5 @@
 import { Suspense, type ReactNode } from "react";
+import { BetaBanner } from "@/src/components/saq/BetaBanner";
 import { SaqAuthenticatedHeader } from "@/src/components/saq/SaqAuthenticatedHeader";
 
 /** Matches header chrome so layout does not jump while search-params hydrate (Next.js CSR bailout). */
@@ -16,6 +17,7 @@ function SaqHeaderFallback() {
 export default function SaqLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-slate-900">
+      <BetaBanner />
       <Suspense fallback={<SaqHeaderFallback />}>
         <SaqAuthenticatedHeader />
       </Suspense>
