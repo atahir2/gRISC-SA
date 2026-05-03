@@ -201,8 +201,9 @@ export function QuestionnaireStep({
                                     </p>
                                   )}
                                 </div>
-                                <div className="shrink-0 lg:pl-4">
+                                <div className="w-full shrink-0 lg:w-80 lg:max-w-md lg:pl-4">
                                   <CapabilitySelector
+                                    answerOptions={q.answerOptions}
                                     value={ans?.selectedScore}
                                     onChange={(score) =>
                                       upsertAnswer(q.id, score)
